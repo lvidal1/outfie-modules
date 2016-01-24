@@ -1,0 +1,467 @@
+.shortcodes-icons{
+	padding: 30px 0;
+}
+
+.shortcodes-icons h1{
+	font-family: 'Raleway', sans-serif;
+	text-transform: uppercase;
+	font-weight: 400;
+	font-size: 18px;
+	margin-top: 30px;
+}
+
+/*===================
+    STYLE  ICONS
+====================*/
+
+[class^="sicon-"], [class*=" sicon-"] {
+	background-image: url(../img/icons/estilo-sprite-circle2.svg);
+	display: inline-block;
+	/*background-color: green;*/
+	vertical-align: middle;
+}
+
+/* Size Large */
+
+[class^="sicon-lg-"], [class*=" sicon-lg-"] {
+	width: 120px;
+	height: 120px;
+	-webkit-background-size: 100%;
+  background-size: 100%;
+}
+.sicon-lg-boho{
+	background-position: 0 0;
+}
+.sicon-lg-preppy{
+	background-position: 0px -130px;
+}
+.sicon-lg-minimal{
+	background-position: 0px -260px;
+}
+.sicon-lg-romantic{
+	background-position: 0px -390px;
+}
+.sicon-lg-grunge{
+	background-position: 0px -520px;
+}
+.sicon-lg-vintage{
+	background-position: 0px -650px;
+}
+.sicon-lg-roker{
+	background-position: 0px -780px;
+}
+.sicon-lg-casual{
+	background-position: 0px -910px;
+}
+.sicon-lg-tomboy{
+	background-position: 0px -1040px;
+}
+.sicon-lg-sexy{
+	background-position: 0px -1170px;
+}
+
+.sicon-lg-sporty{
+	background-position: 0px -1300px;
+}
+
+.sicon-lg-hipster{
+	background-position: 0px -1430px;
+}
+
+/* Size Medium */
+
+[class^="sicon-md-"], [class*=" sicon-md-"] {
+	width: 48px;
+	height: 48px;
+	-webkit-background-size: 100%;
+  background-size: 100%;
+}
+.sicon-md-boho{
+	background-position: -48px 0;
+}
+.sicon-md-preppy{
+	background-position: -48px -52px;
+}
+.sicon-md-minimal{
+	background-position: -48px -104px;
+}
+.sicon-md-romantic{
+	background-position: -48px -156px;
+}
+.sicon-md-grunge{
+	background-position: -48px -208px;
+}
+.sicon-md-vintage{
+	background-position: -48px -260px;
+}
+.sicon-md-roker{
+	background-position: -48px -312px;
+}
+.sicon-md-casual{
+	background-position: -48px -364px;
+}
+.sicon-md-tomboy{
+	background-position: -48px -416px;
+}
+.sicon-md-sexy{
+	background-position: -48px -468px;
+}
+.sicon-md-sporty{
+	background-position: -48px -520px;
+}
+.sicon-md-hipster{
+	background-position: -48px -572px;
+}
+
+
+/* Size Small */
+
+[class^="sicon-sm-"], [class*=" sicon-sm-"] {
+	width: 24px;
+	height: 24px;
+	-webkit-background-size: 24px;
+  background-size: 24px;
+}
+.sicon-sm-boho{
+	background-position: 0 0px;
+}
+.sicon-sm-preppy{
+	background-position: 0 -26px;
+}
+.sicon-sm-minimal{
+	background-position: 0 -52px;
+}
+.sicon-sm-romantic{
+	background-position: 0 -78px;
+}
+.sicon-sm-grunge{
+	background-position: 0 -104px;
+}
+.sicon-sm-vintage{
+	background-position: 0 -130px;
+}
+.sicon-sm-roker{
+	background-position: 0 -156px;
+}
+.sicon-sm-casual{
+	background-position: 0 -182px;
+}
+.sicon-sm-tomboy{
+	background-position: 0 -208px;
+}
+.sicon-sm-sexy{
+	background-position: 0 -234px;
+}
+.sicon-sm-sporty{
+	background-position: 0 -260px;
+}
+.sicon-sm-hipster{
+	background-position: 0 -286px;
+}
+
+/* Size Medium */
+
+[class^="sicon-40-"], [class*=" sicon-40-"] {
+	width: 40px;
+	height: 40px;
+	-webkit-background-size: 100%;
+  background-size: 100%;
+}
+.sicon-40-boho{
+	background-position: -40px 0;
+}
+.sicon-40-preppy{
+	background-position: -40px -43px;
+}
+.sicon-40-minimal{
+	background-position: -40px -87px;
+}
+.sicon-40-romantic{
+	background-position: -40px -130px;
+}
+.sicon-40-grunge{
+	background-position: -40px -173px;
+}
+.sicon-40-vintage{
+	background-position: -40px -216px;
+}
+.sicon-40-roker{
+	background-position: -40px -260px;
+}
+.sicon-40-casual{
+	background-position: -40px -303px;
+}
+.sicon-40-tomboy{
+	background-position: -40px -346px;
+}
+.sicon-40-sexy{
+	background-position: -40px -390px;
+}
+.sicon-40-sporty{
+	background-position: -40px -433px;
+}
+.sicon-40-hipster{
+	background-position: -40px -476px;
+}
+
+/*===================
+    OCATION  ICONS
+====================*/
+
+[class^="oicon-"], [class*=" oicon-"] {
+	background-image: url(../img/icons/ocacion-sprite-white.svg);
+	display: inline-block;
+	/*background-color: green;*/
+}
+
+/* Size Medium */
+
+[class^="oicon-md-"], [class*=" oicon-md-"] {
+	width: 68px;
+	height: 68px;
+	-webkit-background-size: 68px;
+  background-size: 68px;
+}
+.oicon-md-playa{
+	background-position: 0 0;
+}
+.oicon-md-boda{
+	background-position: 0 -72px;
+}
+.oicon-md-cita{
+	background-position: 0 -146px;
+}
+.oicon-md-oficina{
+	background-position: 0 -219px;
+}
+.oicon-md-cocktail{
+	background-position: 0 -291px;
+}
+.oicon-md-outdoor{
+	background-position: 0 -364px;
+}
+.oicon-md-deporte{
+	background-position: 0 -437px;
+}
+.oicon-md-viaje{
+	background-position: 0 -510px;
+}
+.oicon-md-festival{
+	background-position: 0 -583px;
+}
+.oicon-md-casual{
+	background-position: 0 -656px;
+}
+
+/*===================
+    BUTTON  ICONS
+====================*/
+
+[class^="bicon-"], [class*=" bicon-"] {
+	background-image: url(../img/icons/estilo-sprite-circle2.svg);
+	display: inline-block;
+	/*background-color: green;*/
+	vertical-align: middle;
+}
+
+/* Size Small */
+
+[class^="bicon-sm-"], [class*=" bicon-sm-"] {
+	width: 24px;
+	height: 24px;
+	-webkit-background-size: 100%;
+  background-size: 100%;
+}
+
+.bicon-sm-heart{
+	background-position: 0 -312px;
+}
+.bicon-sm-coment{
+	background-position: 0 -338px;
+}
+.bicon-sm-buy{
+	background-position: 0 -364px;
+}
+.bicon-sm-star{
+	background-position: 0 -390px;
+}
+.bicon-sm-share{
+	background-position: 0 -416px;
+}
+.bicon-sm-day{
+	background-position: 0 -442px;
+}
+.bicon-sm-bag{
+	background-position: 0 -468px;
+}
+.bicon-sm-plus{
+	background-position: 0 -494px;
+}
+
+/* Size Medium */
+
+[class^="bicon-md-"], [class*=" bicon-md-"] {
+	width: 52px;
+	height: 52px;
+	-webkit-background-size: 100%;
+  background-size: 100%;
+}
+
+.bicon-md-heart{
+	background-position: 0 -676px;
+}
+.bicon-md-coment{
+	background-position: 0 -732px;
+}
+.bicon-md-buy{
+	background-position: 0 -788px;
+}
+.bicon-md-star{
+	background-position: 0 -845px;
+}
+.bicon-md-share{
+	background-position: 0 -901px;
+}
+.bicon-md-day{
+	background-position: 0 -957px;
+}
+.bicon-md-bag{
+	background-position: 0 -1013px;
+}
+.bicon-md-plus{
+	background-position: 0 -1070px;
+}
+
+/*===================
+    CUERPO  ICONS
+====================*/
+
+[class^="cicon-"], [class*=" cicon-"] {
+	background-image: url(../img/icons/cuerpo-sprite.svg);
+	display: inline-block;
+	/*background-color: green;*/
+	vertical-align: middle;
+}
+
+/* Size Medium */
+
+[class^="cicon-sm-"], [class*=" cicon-sm-"] {
+	width: 24px;
+	height: 24px;
+	-webkit-background-size: 24px;
+  background-size: 24px;
+}
+
+.cicon-sm-rectangle{
+	background-position: 0 0;
+}
+.cicon-sm-oval{
+	background-position: 0 -25px;
+}
+.cicon-sm-pera{
+	background-position: 0 -51px;
+}
+.cicon-sm-reloj{
+	background-position: 0 -77px;
+}
+.cicon-sm-triangle{
+	background-position: 0 -102px;
+}
+
+/* Size Medium */
+
+[class^="cicon-md-"], [class*=" cicon-md-"] {
+	width: 30px;
+	height: 30px;
+	-webkit-background-size: 30px;
+  background-size: 30px;
+}
+
+.cicon-md-rectangle{
+	background-position: 0 0;
+}
+.cicon-md-oval{
+	background-position: 0 -32px;
+}
+.cicon-md-pera{
+	background-position: 0 -64px;
+}
+.cicon-md-reloj{
+	background-position: 0 -96px;
+}
+.cicon-md-triangle{
+	background-position: 0 -128px;
+}
+
+/*===================
+    PRENDAS  ICONS
+====================*/
+
+[class^="picon-"], [class*=" picon-"] {
+	background-image: url(../img/icons/prendas-sprite.svg);
+	display: inline-block;
+	/*background-color: green;*/
+	vertical-align: middle;
+}
+
+[class^="picon-md-"], [class*=" picon-md-"] {
+	width: 36px;
+	height: 36px;
+	-webkit-background-size: 36px;
+  background-size: 36px;
+}
+
+.picon-md-abrigo{
+	background-position: 0 4px;
+}
+.picon-md-accesorio{
+	background-position: 0 -31px;
+}
+.picon-md-lenceria{
+	background-position: 0 -58px;
+}
+.picon-md-bikini{
+	background-position: 0 -90px;
+}
+.picon-md-cartera{
+	background-position: 0 -124px;
+}
+.picon-md-zapato{
+	background-position: 0 -159px;
+}
+.picon-md-joyeria{
+	background-position: 0 -195px;
+}
+.picon-md-short{
+	background-position: 0 -232px;
+}
+.picon-md-belleza{
+	background-position: 0 -271px;
+}
+.picon-md-vestido{
+	background-position: 0 -309px;
+}
+.picon-md-falda{
+	background-position: 0 -349px;
+}
+.picon-md-polera{
+	background-position: 0 -389px;
+}
+.picon-md-chompa{
+	background-position: 0 -430px;
+}
+.picon-md-demin{
+	background-position: 0 -472px;
+}
+.picon-md-sastre{
+	background-position: 0 -514px;
+}
+.picon-md-jacket{
+	background-position: 0 -557px;
+}
+.picon-md-blusa{
+	background-position: 0 -602px;
+}
+.picon-md-pantalon{
+	background-position: 0 -646px;
+}

@@ -1,0 +1,141 @@
+@mixin translate( $xaxis , $yaxis ){
+	-webkit-transform: translate( $xaxis , $yaxis);
+    -moz-transform: translate( $xaxis , $yaxis);
+    -o-transform: translate( $xaxis , $yaxis);
+    -ms-transform: translate( $xaxis , $yaxis);
+    transform: translate( $xaxis , $yaxis);
+}
+@mixin transition( $tiempo , $function ){
+    -moz-transition: $tiempo $function !important;
+    -ms-transition: $tiempo $function !important;
+    -o-transition: $tiempo $function !important;
+    transition: $tiempo $function !important;
+}
+
+$animation : ease;
+$time : 1s;
+
+#wizard{
+
+	.wrap{
+		position:relative;
+		min-height:370px;
+		overflow:hidden;
+		padding: 0;
+	}
+	.create-dilema__bar{
+	    margin-top: 0;
+	    @include transition( $time , $animation );
+	    min-height: 85px;
+	    position: relative;
+		&.ng-hide{
+		    margin-top:-85px;
+		}
+	}
+	.btn-option{
+		position: relative;
+	    @include transition( $time , $animation );
+	    top: 0;
+		&.ng-hide{
+		    top:-90px;
+		}
+	}
+	.slide {
+		&.ng-enter,&.ng-leave{
+			position: absolute;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 100%;
+		    @include transition( $time , $animation );
+		}
+	   	&.ng-enter {
+	   	    left: 100%;
+	   	}
+	   	&.ng-enter-active {
+	   	    left: 0;
+	   	}
+	   	&.ng-leave {
+	   	    left: 0;
+	   	}
+	   	&.ng-leave-active {
+	   	    left: -100%;
+	   	}
+	}
+	.slidedown {
+		&.ng-enter,&.ng-leave{
+			position: absolute;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 100%;
+		    @include transition( $time , $animation );
+		}
+	   	&.ng-enter {
+		    top: -100%;
+		}
+		&.ng-enter-active {
+		    top: 0;
+		}
+		&.ng-leave {
+		    top: 0;
+		}
+		&.ng-leave-active {
+		    top: 100%;
+		}
+	}
+	.slideup{
+		&.ng-enter,&.ng-leave{
+			position: absolute;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 100%;
+		    @include transition( $time , $animation );
+		}
+	   	&.ng-enter {
+		    top: 100%;
+		}
+		&.ng-enter-active {
+		    top: 0;
+		}
+		&.ng-leave {
+		    top: 0;
+		}
+		&.ng-leave-active {
+		    top: -100%;
+		}
+	}
+	.fade{
+		opacity:1;
+		&.ng-enter,&.ng-leave{
+			position: absolute;
+		    left: 0;
+		    top: 0;
+		    width: 100%;
+		    height: 100%;
+		    @include transition( $time , $animation );
+		}
+	   	&.ng-enter {
+	   	    opacity: 0;
+	   	}
+	   	&.ng-enter-active {
+	   	    opacity: 1;
+	   	}
+	   	&.ng-leave {
+	   	    opacity: 1;
+	   	}
+	   	&.ng-leave-active {
+	   	    opacity: 0;
+	   	}
+	}
+	
+
+	/*Elemets active*/
+	.create-dilema__carousel .item a.active, .create-dilema__carousel .item a.active .inner {
+	    border-color: #03D4AD;
+	}
+	.create-dilema__for-when .btn.active {
+	    background: #03D4AD;
+	}
+}

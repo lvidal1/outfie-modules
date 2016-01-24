@@ -1,0 +1,114 @@
+<div class="container" pluginsfor="p7">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="create-dilema__image text-center">
+				<h2>IMAGEN DE TU DILEMA</h2>
+				<a class="btn-change" href="" title="" ng-click="changeImagen()">CAMBIAR</a>
+				<div class="image-box">
+					<img class="img-responsive" src="{{preferences.p6.src}}" alt="">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="create-dilema__style">
+				<h2 class="text-center">¿QUE ESTILO BUSCAS?</h2>
+				<p>Maximo 3 estilos</p>
+				
+				<div class="styles-block text-center">
+					<a class="style120 {{item.class}} {{item.select}}" href="" title="" ng-repeat="item in preferences.p7" ng-click="setEstilo(item,$index)"></a>
+				</div>
+				
+				<div class="buttons-block">
+					<div class="row">
+						<div class="col-md-6">
+							<a class="btn btn-green-lg" href="" title="" data-toggle="modal" data-target="#myModal">VISTA PREVIA</a>
+						</div>
+						<div class="col-md-6">
+							<a class="btn btn-black-lg pull-right" href="" title="" ng-click="publicar()" data-target="#result">PUBLICAR</a>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Preview Dilema Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-preview">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Asi verán tu Dilema nuestra comunidad</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-6">
+						<img class="img-responsive" src="{{preferences.p6.src}}" alt="">
+					</div>
+					<div class="col-md-6">
+						<div class="preview-details">
+							<div class="product-details__heading text-center">
+								<h1>{{preferences.p4.titulo}}</h1>
+								<p>{{preferences.p4.hashtag}}</p>
+							</div>
+							<div class="product-details__content text-center">
+								<p class="product-details__content-descrip">{{preferences.p4.descripcion}}</p>
+								<div class="product-details__content-budget">
+									<h5>PRESUPUESTO<h5>
+									<button class="btn btn-green btn-price">{{preferences.p5.text}}</button>
+								</div>
+							</div>
+							<div class="product-details__info">
+								<div class="item">
+									<p class="info-label">Faltan <span class="btn-26 btn-lack" data-toggle="tooltip" data-placement="auto bottom" title="dias">3</span></p>
+								</div>
+								<div class="item divider">/</div>
+								<div class="item">
+									<a class="btn btn-white btn-follow-dilema"href="" title="">Seguir</a>
+								</div>
+								<div class="item divider">/</div>
+								<div class="item">
+									<p class="info-label">COMPARTE <a class="btn-26 btn-share" href="" title=""></a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="share-dilema pull-left">
+					<h2>Compatir en:</h2>
+					<a class="btn-social btn-facebook" href="" title=""></a>
+        			<a class="btn-social btn-twitter" href="" title=""></a>
+				</div>
+				<button type="button" class="btn btn-publicar" ng-click="publicar()">PUBLICAR</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Preview Dilema Modal -->
+<div class="modal fade" id="result" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-preview">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">JSON data</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12 ">
+						<textarea class="data-result form-control" style="height:400px" >
+							
+						</textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-publicar" data-dismiss="modal" >Cerrar</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,42 @@
+<div class="container" pluginsfor="p2">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="create-dilema__heading">
+				<h1 class="text-center">¿DONDE LO USARAS? </h1>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="create-dilema__where-used text-center">
+				<div class="row">
+					<div class="col-md-5">
+						<a class="btn btn-lg pull-block {{ui.show.ciudad.class}}" href="" ng-click="showSelect('ciudad')" >Ciudad</a>
+					</div>
+					<div class="col-md-2">
+						<span class="or">Ó</span>
+					</div>
+					<div class="col-md-5">
+						<a class="btn btn-lg pull-block {{ui.show.lugar.class}}" href="" ng-click="showSelect('lugar')" >Lugar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<div class="create-dilema__select-location" ng-show="ui.show.ciudad.select">
+				<select class="selectpicker pull-block" ng-options="i.text for i in ciudad" ng-model="preferences.p2.ciudad" ng-change="changeDonde('ciudad')" >
+ 				</select>
+			</div>
+
+			<div class="create-dilema__select-location" ng-show="ui.show.lugar.select">
+				<select class="selectpicker pull-block" ng-options="i.text for i in lugar" ng-model="preferences.p2.lugar" ng-change="changeDonde('lugar')" >
+ 				</select>
+			</div>
+		</div>
+	</div>
+	
+</div>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from outfie.bmgcenter.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 16 Jan 2016 18:38:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- meta viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Outfie</title>
+  <!-- Google font -  Open Sans -->
+  <link href='https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,200,300,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:400,700,600,500,300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  
+  <!-- Bootstrap core CSS -->
+  <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="css/animate.css" rel="stylesheet">
+	<link href="css/shortcodes.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+  <!-- Owlcarousel -->
+  <link rel="stylesheet" href="assets/carousel/assets/owl.carousel.css">
+    <!-- Bootstrap Select-->
+  <link href="assets/select/css/bootstrap-select.css" rel="stylesheet">
+  <!-- Wizard -->
+  <link rel="stylesheet" href="assets/wizard/wizard.css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="topbar">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand page-scroll" href="index-2.html"><img alt="Outfie" src="img/outfie.png"></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="index-2.html"><span>Descubre</span></a>
+            </li>
+            <li class="divider"><span></span></li>
+            <li>
+              <a href="recomienda.html"><span>Recomienda</span></a>
+            </li>
+            <li class="divider"><span></span></li>
+            <li>
+              <a href="dilema.html"><span>Inspírate</span></a>
+            </li>
+            <li class="divider"><span></span></li>
+            <li>
+              <a href="#"><span>Compra</span></a>
+            </li>
+            <li class="divider"><span></span></li>
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <div class="userbar">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-6">
+            <div class="row">
+              <div class="col-md-8 col-xs-6">
+                <div class="userbar-menu">
+                  <div class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                      <div class="media rightpanel-profile">
+                        <div class="media-left">
+                          <img class="media-object img-circle" src="img/avatar.jpg" alt="">
+                        </div>
+                        <div class="media-body">
+                          <span>¡Hola!</span>
+                          <h4 class="media-heading">ALEXIA</h4>
+                        </div>
+                      </div>
+                      <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-xs-6">
+                <div class="userbar-advice">
+                  <a class="btn btn-green" href="#" title="">Pide asesoria</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <section class="page-content">
+
+      <div id="wizard" ng-app="app">
+
+        <div class="create-dilema">
+          <div class="create-dilema__bar text-center " ng-show="ui.nav" ng-controller="NavCtrl">
+            <div class="container">
+              
+              <a class="btn-option" href="#{{view.url}}" title="" ng-show="view.seen" ng-click="go($index)" ng-repeat="view in views" ng-switch on="view.id" >
+                <div class="btn-option-box" ng-switch-when="p1">
+                  <div class="title">{{view.data.title}}</div>
+                  <div class="occasion">{{view.data.text}}</div>
+                </div>
+                <div class="btn-option-box" ng-switch-when="p2">
+                  <div class="title">{{view.data.title}}</div>
+                  <div class="occasion">{{view.data.text}}</div>
+                </div>
+                <div class="btn-option-box" ng-switch-when="p3">
+                  <div class="title">{{view.data.title}}</div>
+                  <div class="occasion">{{view.data.text}}</div>
+                </div>
+                <div class="btn-option-box" ng-switch-when="p4">
+                  <div class="title">{{view.data.title}}</div>
+                  <div class="occasion">{{view.data.text}}</div>
+                </div>
+                <div class="btn-option-box" ng-switch-when="p4-2">
+                  <div class="hashtags">{{view.data.text}}</div>
+                </div>
+                <div class="btn-option-box" ng-switch-when="p5">
+                  <div class="title">{{view.data.title}}</div>
+                  <div class="occasion">{{view.data.text}}</div>
+                </div>
+                <div class="btn-option-box" ng-switch-when="p6">
+                  <div class="title">{{view.data.title}}</div>
+                  <div class="occasion">{{view.data.text}}</div>
+                </div>
+                <div class="btn-option-box" ng-switch-when="p7">
+                  <div class="title">{{view.data.title}}</div>
+                  <div class="occasion">{{view.data.text}}</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="wrap container">
+            <div ng-view class="views slide"></div>
+          </div>
+        </div>
+        
+      </div>
+
+  </section>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+    </div>
+  </footer>
+  <!-- Jquery - Bootstrap core JavaScript -->
+  <script src="js/jquery-1.11.3.min.js"></script>
+  <script src="js/jquery-migrate-1.2.1.min.js"></script>
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+  <!-- Owlcarousel -->
+  <script src="assets/carousel/owl.carousel.js"></script>
+  <!-- Masonry -->
+  <script src="assets/masonry/imagesLoaded.js"></script>
+  <script src="assets/masonry/masonry.pkgd.min.js"></script>
+  <!-- Bootstrap Select-->
+  <script type="text/javascript" src="assets/select/js/bootstrap-select.min.js"></script>
+  <!-- Wizard -->
+  <script src="assets/wizard/angular/angular.min.js"></script>
+  <script src="assets/wizard/angular/angular.route.js"></script>
+  <script src="assets/wizard/angular/angular-animate.js"></script>
+  <script src="assets/wizard/wizard.js"></script>
+  <script>
+    (function($) {
+
+      "use strict";
+
+      /*  [ Fixed Top ]
+      	- - - - - - - - - - - - - - - - - - - - */
+
+      if ($(window).width() > 480) {
+
+        $(window).scroll(function() {
+          if ($(this).scrollTop() > 0) {
+            $('.navbar-brand').fadeOut();
+            $('.userbar').fadeOut();
+          } else {
+            $('.navbar-brand').fadeIn();
+            $('.userbar').fadeIn();
+          }
+        });
+
+      }
+
+      /*  [ Owl Carousel ]
+      - - - - - - - - - - - - - - - - - - - - */
+      $('.owl-carousel').owlCarousel({
+        items: 4,
+        loop: true,
+        margin: 10,
+        responsiveClass: true,
+        dots: false,
+        navText: ['', ''],
+        responsive: {
+          0: {
+            items: 1,
+            nav: true
+          },
+          600: {
+            items: 3,
+            nav: true
+          },
+          1000: {
+            items: 4,
+            nav: true,
+            margin: 10
+          }
+        }
+      });
+
+      /*  [ Bootstrap Tooltip ]
+      	- - - - - - - - - - - - - - - - - - - - */
+      $('[data-toggle="tooltip"]').tooltip();
+
+      /*  [ Masonry Catalog ]
+      	- - - - - - - - - - - - - - - - - - - - */
+      var $container = $('.masonry-container');
+
+      $container.imagesLoaded(function() {
+        $container.masonry({
+          columnWidth: '.item',
+          itemSelector: '.item'
+        });
+      });
+
+
+    })(jQuery);
+  </script>
+</body>
+
+
+<!-- Mirrored from outfie.bmgcenter.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 16 Jan 2016 18:39:20 GMT -->
+</html>

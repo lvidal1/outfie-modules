@@ -1,0 +1,129 @@
+{
+	"categories":[
+		{
+			"id":0,
+			"text":"Vestidos",
+			"cssClass":"picon-md-vestido",
+			"status":false,
+			"subcategories":[
+				{"id":0,"text":"Minifalda","status":false},
+				{"id":1,"text":"Maxifaldas","status":false},
+				{"id":2,"text":"Metalicas","status":false},
+				{"id":3,"text":"Floreadas","status":false},
+				{"id":3,"text":"SubCat 5","status":false}
+			]
+		},
+		{
+			"id":1,
+			"text":"Blusas",
+			"cssClass":"picon-md-bluse",
+			"status":false,
+			"subcategories":[
+				{"id":0,"text":"SubCat 1","status":false},
+				{"id":1,"text":"SubCat 2","status":false},
+				{"id":2,"text":"SubCat 3","status":false},
+				{"id":3,"text":"SubCat 4","status":false}
+			]
+		},
+		{
+			"id":2,
+			"text":"Faldas",
+			"cssClass":"picon-md-falda",
+			"status":false,
+			"subcategories":[
+				{"id":0,"text":"Minifalda","status":false},
+				{"id":1,"text":"Maxifaldas","status":false},
+				{"id":2,"text":"Metalicas","status":false},
+				{"id":3,"text":"Floreadas","status":false}
+			]
+		},
+		{
+			"id":3,
+			"text":"Pantalones",
+			"cssClass":"picon-md-pantalon",
+			"status":false,
+			"subcategories":[
+				{"id":0,"text":"SubCat 1","status":false},
+				{"id":1,"text":"SubCat 2","status":false},
+				{"id":2,"text":"SubCat 3","status":false},
+				{"id":3,"text":"SubCat 4","status":false}
+			]
+		},
+		{
+			"id":5,
+			"text":"Carteras",
+			"cssClass":"picon-md-cartera",
+			"status":false,
+			"subcategories":[
+				{"id":0,"text":"SubCat 1","status":false},
+				{"id":1,"text":"SubCat 2","status":false},
+				{"id":2,"text":"SubCat 3","status":false},
+				{"id":3,"text":"SubCat 4","status":false}
+			]
+		},
+		{
+			"id":6,
+			"text":"Zapatos",
+			"cssClass":"picon-md-zapato",
+			"status":false,
+			"subcategories":[
+				{"id":0,"text":"SubCat 1","status":false},
+				{"id":1,"text":"SubCat 2","status":false},
+				{"id":2,"text":"SubCat 3","status":false},
+				{"id":3,"text":"SubCat 4","status":false}
+			]
+		},
+		{
+			"id":7,
+			"text":"Accesorios",
+			"cssClass":"picon-md-accesorio",
+			"status":false,
+			"subcategories":[
+				{"id":0,"text":"SubCat 1","status":false},
+				{"id":1,"text":"SubCat 2","status":false},
+				{"id":2,"text":"SubCat 3","status":false},
+				{"id":3,"text":"SubCat 4","status":false}
+			]
+		},
+		{
+			"id":8,
+			"text":"Joyeria",
+			"cssClass":"picon-md-joyeria",
+			"status":false,
+			"subcategories":[
+				{"id":0,"text":"SubCat 1","status":false},
+				{"id":1,"text":"SubCat 2","status":false},
+				{"id":2,"text":"SubCat 3","status":false},
+				{"id":3,"text":"SubCat 4","status":false}
+			]
+		},
+		{
+			"id":9,
+			"text":"Chompas",
+			"cssClass":"picon-md-chompa",
+			"status":false,
+			"subcategories":[]
+		},
+		{
+			"id":10,
+			"text":"Sastre",
+			"cssClass":"picon-md-sastre",
+			"status":false,
+			"subcategories":[]
+		},
+		{
+			"id":11,
+			"text":"Jackets",
+			"cssClass":"picon-md-jacket",
+			"status":false,
+			"subcategories":[]
+		},
+		{
+			"id":12,
+			"text":"Sastre",
+			"cssClass":"picon-md-short",
+			"status":false,
+			"subcategories":[]
+		}
+	]
+}

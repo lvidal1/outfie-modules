@@ -1,0 +1,20 @@
+<div class="container" pluginsfor="p3">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="create-dilema__heading">
+				<h1 class="text-center">¿PARA CUANDO LO NECESITAS?</h1>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="create-dilema__for-when">
+				<a class="btn {{item.active}}" title="" ng-repeat="item in fechas" ng-click="setFecha(item)">
+					<span>En {{item.number}} <br /> {{item.unit}}</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	
+</div>

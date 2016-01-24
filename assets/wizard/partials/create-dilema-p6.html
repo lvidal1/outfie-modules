@@ -1,0 +1,31 @@
+<div class="container" pluginsfor="p6">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="create-dilema__heading">
+				<h1 class="text-center">Escoje una imagen que represente tu dilema</h1>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="create-dilema__carousel image-carousel">
+				<div id="imagen-carousel" class="owl-carousel">
+					<div ng-repeat="item in galeria" ng-if="$index % 2 == 0" class="item">
+					    <a href="" title="" class="{{galeria[$index].active}}" ng-click="setImagen(galeria[$index])">
+							<div class="inner">
+								<img src="{{galeria[$index].src}}" alt="">
+							</div>
+						</a>
+						<a href="" title="" class="{{galeria[$index+1].active}}" ng-click="setImagen(galeria[$index+1])">
+							<div class="inner">
+								<img src="{{galeria[$index+1].src}}" alt="">
+							</div>
+						</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
