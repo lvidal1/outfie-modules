@@ -6,11 +6,11 @@
 			"cssClass":"picon-md-vestido",
 			"status":false,
 			"subcategories":[
-				{"id":0,"text":"Minifalda","status":false},
-				{"id":1,"text":"Maxifaldas","status":false},
-				{"id":2,"text":"Metalicas","status":false},
-				{"id":3,"text":"Floreadas","status":false},
-				{"id":3,"text":"SubCat 5","status":false}
+				{"id":0,"text":"Todos","status":false},
+				{"id":1,"text":"Largos","status":false},
+				{"id":2,"text":"Cortos","status":false},
+				{"id":3,"text":"Medianos","status":false},
+				{"id":4,"text":"Invierno","status":false}
 			]
 		},
 		{
@@ -19,10 +19,11 @@
 			"cssClass":"picon-md-bluse",
 			"status":false,
 			"subcategories":[
-				{"id":0,"text":"SubCat 1","status":false},
-				{"id":1,"text":"SubCat 2","status":false},
-				{"id":2,"text":"SubCat 3","status":false},
-				{"id":3,"text":"SubCat 4","status":false}
+				{"id":0,"text":"Todos","status":false},
+				{"id":1,"text":"Cortas","status":false},
+				{"id":2,"text":"Floreadas","status":false},
+				{"id":3,"text":"A rayas","status":false},
+				{"id":4,"text":"Delgadas","status":false}
 			]
 		},
 		{
@@ -31,10 +32,11 @@
 			"cssClass":"picon-md-falda",
 			"status":false,
 			"subcategories":[
-				{"id":0,"text":"Minifalda","status":false},
-				{"id":1,"text":"Maxifaldas","status":false},
-				{"id":2,"text":"Metalicas","status":false},
-				{"id":3,"text":"Floreadas","status":false}
+				{"id":0,"text":"Todos","status":false},
+				{"id":1,"text":"Minifalda","status":false},
+				{"id":2,"text":"Maxifaldas","status":false},
+				{"id":3,"text":"Metalicas","status":false},
+				{"id":4,"text":"Floreadas","status":false}
 			]
 		},
 		{
@@ -43,10 +45,11 @@
 			"cssClass":"picon-md-pantalon",
 			"status":false,
 			"subcategories":[
-				{"id":0,"text":"SubCat 1","status":false},
-				{"id":1,"text":"SubCat 2","status":false},
-				{"id":2,"text":"SubCat 3","status":false},
-				{"id":3,"text":"SubCat 4","status":false}
+				{"id":0,"text":"Todos","status":false},
+				{"id":1,"text":"Tableados","status":false},
+				{"id":2,"text":"Drill","status":false},
+				{"id":3,"text":"Leggins","status":false},
+				{"id":4,"text":"Floreadas","status":false}
 			]
 		},
 		{

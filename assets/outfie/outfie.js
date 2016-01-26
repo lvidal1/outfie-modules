@@ -284,15 +284,15 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			$scope.setCategoryActive( 0 );
 		});
 
-		$scope.setCategoryActive = function( index ){
+		$scope.setCategoryActive = function( index , item){
 			$scope.subcategories = mainService.subcategories.set( $scope.categories[index].subcategories );
-			mainService.config.get().category = index;
+			mainService.config.get().category = item;
 			mainService.categories.setActive( index );
 
 			$scope.setSubCategoryActive( 0 );
 		}
-		$scope.setSubCategoryActive = function( index ){
-			mainService.config.get().subcategory = index;
+		$scope.setSubCategoryActive = function( index , item){
+			mainService.config.get().subcategory = item;
 			mainService.subcategories.setActive( index );
 		}
 		$scope.isActive = function( categoryStatus ){
@@ -314,12 +314,36 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		$scope.boxItemActive = false;
 		$scope.boxItemModelActive = false;
 
+		$scope.config = mainService.config.get();
+
+		$scope.categories = mainService.categories.get();
+
 		$scope.currentPage = mainService.config.get().sandbox.pagination.currentPage;
   		$scope.pageSize = mainService.config.get().sandbox.pagination.pageSize;
 
   		// Connection with filter bar
 	    $scope.$watch("mainService.config.subcategory", function(o,n,e) {
 	        $scope.getSand().then(function(a){
+	        	// Simulate category and subcat$scope.config.get().category[i]
+	        		var cat = [];
+	        		for (var i = 0; i < $scope.categories.length; i++) {
+	        			cat.push( {id:$scope.categories[i].id,ch:[]} );
+	        			for (var j = 0; j < $scope.categories[i].subcategories.length; j++) {
+	        				cat[i].ch({id:$scope.categories[i].subcategories[j].id});
+	        			};
+	        		};
+	        		console.log ( $scope.categories );
+
+	        		for (var i = 0; i < a.length; i++) {
+	        			var RandCat = Math.floor(Math.random() * (cat.length-1 - 0 + 1)) + 0;
+	        			var RandSub = Math.floor(Math.random() * (cat[RandCat].length - 0 + 1)) + 0;
+	        		
+	        			a.cat = cat[RandCat].id;
+	        			a.sub = cat[RandCat].ch[RandSub].id;
+	        		};
+
+	        		console.log(a);
+
 	        	$scope.products = a;
 	        });
 	        $scope.getBox().then(function(a){

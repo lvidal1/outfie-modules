@@ -198,7 +198,7 @@
 								<div class="clothing-category">
 									<data-owl-carousel class="owl-carousel clothing-carousel" id="clothing-carousel" data-options="1">
 								      	<div class="item" owl-carousel-item="" ng-repeat="item in categories">
-											<a href="#" title="" ng-class="isActive(item.status)" ng-click="setCategoryActive($index)"><span class="{{item.cssClass}}"></span> {{item.text}}</a>
+											<a href="#" title="" ng-class="isActive(item.status)" ng-click="setCategoryActive($index,item)"><span class="{{item.cssClass}}"></span> {{item.text}}</a>
 										</div>
 								    </data-owl-carousel>
 								</div>
@@ -212,7 +212,7 @@
 												<div class="content">
 													<h4>SUBCATEGORÍAS</h4>
 													<data-owl-carousel id="subcategory-carousel" class="subcategory-carousel owl-carousel" data-options="2">
-														<div class="item" owl-carousel-item="" ng-repeat="item in subcategories"><a href="#" title="" ng-class="isActive(item.status)">{{item.text}}</a></div>
+														<div class="item" owl-carousel-item="" ng-repeat="item in subcategories"><a href="#" title="" ng-click="setSubCategoryActive($index,item)" ng-class="isActive(item.status)">{{item.text}}</a></div>
 												    </data-owl-carousel>
 												</div>
 											</div>
@@ -242,7 +242,7 @@
 								
 								<div class="sand-section">
 									<div class="products-page">
-										<div class="sand-image" dir-paginate="item in products | itemsPerPage: pageSize" current-page="currentPage"
+										<div class="sand-image" dir-paginate="item in products | itemsPerPage: pageSize | filter: {cat : config.category.id}" current-page="currentPage"
 										data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="products" jqyoui-draggable="{index:$index,applyFilter:'{{currentPage}}-{{pageSize}}',placeholder: 'keep',deepCopy :true}">
 							                <div class="wrap">
 							                	<img src="{{item.url_m}}">
