@@ -5,6 +5,7 @@ var ROOT_USERDATA = "ws.user.json";
 var ROOT_GETDATA = "ws.data.json";
 var ROOT_GETPRODUCTS = "ws.products.json";
 var ROOT_SETDATA = "ws.data.php";
+var ROOT_PROCESSCROP = "ws.processCrop.php"
 var $config = {
 		category :    ST_INACTIVE,
 		subcategory : ST_INACTIVE,
@@ -198,6 +199,9 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 							var left = ( cWidth - width )/ 2;
 							var top = ( cHeight - height )/ 2;
 
+							scope.$parent.item.size = {width:width,height:height};
+							scope.$parent.item.position = {left:left,top:top};
+
 							elem.css({left:left,top:top});
 						});
 					}else{
@@ -380,7 +384,8 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			$scope.box[index].status = ST_ACTIVE;
 			$scope.boxItemActive = index;
 			$scope.boxItemModelActive = $scope.box[index];
-			console.log($scope.boxItemActive);
+
+			mainService.boxItemModelActive = $scope.boxItemModelActive;
 	    }
 	    $scope.isActive = function( boxItemStatus ){
 	    	if( boxItemStatus == ST_ACTIVE ){
@@ -465,8 +470,8 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    	if( index == -1){
 	    		return false;
 	    	}
-	    	console.log("Del:"+item);
-	    	console.log($scope.box.indexOf(item));
+	    	// console.log("Del:"+item);
+	    	// console.log($scope.box.indexOf(item));
 	    	
 	    	for (var i = 0; i < $scope.box.length; i++) {
 	    		if(i>index){
@@ -477,12 +482,19 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    	$scope.box.splice(index, 1);
 	    	$scope.boxItemModelActive = false;
 	    }
+	    $scope.cropInit = function(){
+	    	$scope.$broadcast('cropInit', $scope.boxItemModelActive );
+	    }
+	    $scope.$on('cropDone', function(event, src) { 
+			$scope.box[$scope.boxItemActive].url_m = src;
+			$scope.$apply();
+		});
 	    $scope.saveOutfie = function(){
 
 	    	if($scope.box.length >= 1){
-				for (var i = 0; i < $scope.box.length; i++) {
-					console.log( $scope.box[i] );
-				};
+				// for (var i = 0; i < $scope.box.length; i++) {
+				// 	console.log( $scope.box[i] );
+				// };
 				$http({
 			    	method: 'POST',
 			    	url: ROOT_PATH + ROOT_SETDATA,           
@@ -493,14 +505,14 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				// to remove
 			    alert("Done");
 			}else{
-				alert("Debe escoger como minimo un estilos");
+				alert("Debe escoger como minimo una imagen");
 			}
 	    }
 
 	    // Helpers on event
 	    $scope.dragCallback = function (event, ui) {
 	        var obj = ui.draggable;
-		    console.log("Drag: ",obj);
+		    // console.log("Drag: ",obj);
 	    };
 		$scope.dropCallback = function (evt, ui) {
 			// TODO : drop on the position of mouse
@@ -509,7 +521,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		};
 		$scope.drag = function(evt,ui) {
 	      	//console.log (evt,ui);
-	      	console.log(ui);
+	      	// console.log(ui);
 	    }
 		$scope.resize = function(evt,ui) {
 	      	//console.log (evt,ui);
@@ -518,15 +530,212 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    }
 	})
 	.controller('CropCtrl',function CropCtrl($http,$scope,$location,mainService){
-		$scope.image = {src:"",points:[]};
 
 		var condition = 1;
-		var points = [];//holds the mousedown points
 		var idCanvas = 'myCanvas';
 		var canvas = document.getElementById(idCanvas);
 		var jqCanvas = $("#"+idCanvas);
-		var imageSrc = mainService.boxItemModelActive;
+		var ctx = canvas.getContext('2d');
+		var imageObj;
 
+		$scope.image = {};
+		$scope.points = [];
+		$scope.status = ST_INACTIVE;
+
+		$scope.$on('cropInit', function(event, item) { 
+			$scope.getDataImageSelected( item );
+		});
+		
+		$scope.getDataImageSelected = function( item ){
+			$scope.image = item;
+			$scope.points = [];
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			crop(condition,$scope.points,canvas,jqCanvas,$scope.image);
+			$scope.setCropStatus( ST_ACTIVE );
+		}
+
+		$scope.createNewImage = function(){
+
+			if( $scope.points.length == 0){
+				$scope.setCropStatus( ST_INACTIVE );
+				return false;
+			}
+
+			condition = 0;
+			$('.spot').each(function() {
+			    $(this).remove();
+			})
+			//clear canvas
+			ctx.clearRect(0, 0, $scope.image.size.width, $scope.image.size.height);
+			ctx.beginPath();
+			ctx.width = $scope.image.size.width;
+			ctx.height = $scope.image.size.height;
+			ctx.globalCompositeOperation = 'destination-over';
+			//draw the polygon
+			setTimeout(function() {
+
+			    var offset = jqCanvas.offset();
+
+			    for (var i = 0; i < $scope.points.length; i += 2) {
+			        var x = parseInt(jQuery.trim($scope.points[i]));
+			        var y = parseInt(jQuery.trim($scope.points[i + 1]));
+
+			        if (i == 0) {
+			            ctx.moveTo(x - offset.left, y - offset.top);
+			        } else {
+			            ctx.lineTo(x - offset.left, y - offset.top);
+			        }
+			    }
+
+			    // TODO: Check what "this.isOldIE" is for
+			    if (this.isOldIE) {
+
+			        ctx.fillStyle = '';
+			        ctx.fill();
+			        var fill = $('fill', myCanvas).get(0);
+			        fill.color = '';
+			        fill.src = element.src;
+			        fill.type = 'tile';
+			        fill.alignShape = false;
+			    }else {
+			    	// Create a tempCanvas to use it as pattern
+			    	var tempCanvas = document.createElement("canvas"),
+			    	    tCtx = tempCanvas.getContext("2d");
+
+			    	tempCanvas.width = $scope.image.size.width;
+			    	tempCanvas.height = $scope.image.size.height;
+			    	tCtx.drawImage(imageObj,0,0,imageObj.width,imageObj.height,0,0,tempCanvas.width,tempCanvas.height);
+
+			    	// Draw pattern
+			        var pattern = ctx.createPattern(tempCanvas, "repeat");
+			        ctx.fillStyle = pattern;
+			        ctx.fill();
+
+			        var dataurl = canvas.toDataURL("image/png");
+			        var files = dataurl;
+			        var data = new FormData();
+			        data = 'image=' + files;
+
+			        // Save cropped image to server and return its url to use in item in box
+			        var xhr = $.ajax({
+			          	url: ROOT_PATH + ROOT_PROCESSCROP ,
+			          	type: "POST",
+			          	dataType: "json", // expected format for response
+			          	contentType: "application/x-www-form-urlencoded", // send as JSON
+			          	data: data
+			        });
+			        xhr.success(function(rsp , status, jqXHR){
+			        	if(rsp.result){
+			        		$scope.setCropStatus( ST_INACTIVE );
+			        		$(".crop").removeClass("active");
+			        		$scope.setCroppedImage( ROOT_PATH + rsp.image );
+			        	}
+		        	});
+			    }
+			}, 20);
+		}
+
+		$scope.setCroppedImage = function( src ){
+			// After render
+			$scope.$emit('cropDone', src );
+		}
+
+		$scope.setCropStatus = function( status ){
+			$scope.status = status;
+		}
+		$scope.isActive = function( cropStatus ){
+			if( cropStatus == ST_ACTIVE ){
+				return 'active';
+			}else{
+				return ''
+			}
+		}
+		function crop(condition,points,canvas,jqCanvas,item){
+
+			var imageSrc  = $scope.image.url_m;
+
+		    this.isOldIE = (window.G_vmlCanvasManager);
+		    if (this.isOldIE) {
+		        G_vmlCanvasManager.initElement(myCanvas);
+		    }
+		    // Set dimension
+		    canvas.width = $scope.image.size.width;
+		    canvas.height = $scope.image.size.height;
+
+		    // Set dimension of canva-layer for spots
+		    $(".canvas-layer").css({
+		    	width:$scope.image.size.width,
+		    	height:$scope.image.size.height,
+		    	left:$scope.image.position.left,
+		    	top:$scope.image.position.top
+		    })
+
+		    imageObj = new Image();
+		    imageObj.setAttribute('crossOrigin', 'anonymous');
+
+		    var posx = null,posy = null,oldposx = null,oldposy = null;
+
+		    function init() {
+		        canvas.addEventListener('mousedown', mouseDown, false);
+		        canvas.addEventListener('mouseup', mouseUp, false);
+		        canvas.addEventListener('mousemove', mouseMove, false);
+		    }
+
+		    // Draw  image onto the canvas
+		    imageObj.onload = function() {
+		        ctx.drawImage(imageObj, 0, 0, imageObj.width,imageObj.height,    // source rectangle
+                   						0, 0, canvas.width, canvas.height ) // destination rectangle
+		    };
+		    imageObj.src = imageSrc;
+
+		    // Switch the blending mode
+		    ctx.globalCompositeOperation = 'destination-over';
+
+		    //mousemove event
+		    jqCanvas.mousemove(function(e) {
+		        if (condition == 1) {
+		            ctx.beginPath();
+		            posx = e.offsetX;
+		            posy = e.offsetY;
+		        }
+		    });
+		    //mousedown event
+		    jqCanvas.mousedown(function(e) {
+		        if (condition == 1) {
+		            if (e.which == 1) {
+		            	var offset = $(this).offset();
+		            	pTop = (e.pageX - offset.left);
+		            	pLeft = (e.pageY - offset.top);
+
+		                var pointer = $('<span class="spot">').css({
+		                    'position': 'absolute',
+		                    'background-color': 'red',
+		                    'width': '6px',
+		                    'height': '6px',
+		                    'top': pLeft,
+		                    'left': pTop
+		                });
+		                //store the $scope.points on mousedown
+		                $scope.points.push( e.pageX , e.pageY);
+
+		                ctx.globalCompositeOperation = 'destination-out';
+
+		                ctx.beginPath();
+		                ctx.moveTo(oldposx, oldposy);
+		                if (oldposx != null) {
+		                    ctx.lineTo(posx, posy);
+		                    ctx.stroke();
+		                }
+		                oldposx = e.offsetX;
+		                oldposy = e.offsetY;
+
+		                $(".canvas-layer > .wrap").append(pointer);
+		            }
+		            posx = e.offsetX;
+		            posy = e.offsetY;
+		        }//condition
+		    });
+		}
 	});
 
 

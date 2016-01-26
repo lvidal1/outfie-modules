@@ -240,37 +240,61 @@
 							</div>
 							<div class="app-sandbox" ng-controller="SandCtrl">
 								
-									<div class="sand-section">
-										<div class="products-page">
-											<div class="sand-image" dir-paginate="item in products | itemsPerPage: pageSize" current-page="currentPage"
-											data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="products" jqyoui-draggable="{index:$index,applyFilter:'{{currentPage}}-{{pageSize}}',placeholder: 'keep',deepCopy :true}">
-								                <div class="wrap">
-								                	<img src="{{item.url_m}}">
-								                </div>
-								            </div>
-								            <div class="clearfix"></div>
-										</div>
-							            <div class="products-pagination">
-								        	<div class="text-center">
-								        	<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="assets/outfie/dirPagination.tpl.html"></dir-pagination-controls>
-								        	</div>
-								        </div>
+								<div class="sand-section">
+									<div class="products-page">
+										<div class="sand-image" dir-paginate="item in products | itemsPerPage: pageSize" current-page="currentPage"
+										data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="products" jqyoui-draggable="{index:$index,applyFilter:'{{currentPage}}-{{pageSize}}',placeholder: 'keep',deepCopy :true}">
+							                <div class="wrap">
+							                	<img src="{{item.url_m}}">
+							                </div>
+							            </div>
+							            <div class="clearfix"></div>
+									</div>
+						            <div class="products-pagination">
+							        	<div class="text-center">
+							        	<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="assets/outfie/dirPagination.tpl.html"></dir-pagination-controls>
+							        	</div>
 							        </div>
-								
-									<div class="sand-section">
-										<button class="btn btn-xs" ng-click="saveOutfie()">Guardar outfie</button>
-										<button class="btn btn-xs" ng-click="moveLayerUp()">Traer adelante</button>
-										<button class="btn btn-xs" ng-click="moveLayerToFront()">Traer al Frente</button>
-										<button class="btn btn-xs" ng-click="moveLayerDown()">Enviar atrás</button>
-										<button class="btn btn-xs" ng-click="moveLayerToBehind()">Enviar al Fondo</button>
-										<button class="btn btn-xs" ng-click="deleteLayer()">Borrar</button>
-										<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true, onOver: 'dropCallback'}" >
-											<div class="draggable" ng-repeat="item in box track by $index" resizable on-resize="resize($evt, $ui)" on-drag="drag($evt, $ui)" zindex="item.zindex"ng-mousedown="setActive($index)">
-												<img src="{{item.url_m}}" >
+						        </div>
+								<div class="sand-section">
+
+									<div class="sand-wrap">
+										<div class="box">
+											<div class="box-header">
+												<button class="btn btn-xs" ng-click="saveOutfie()">Guardar outfie</button>
+												<button class="btn btn-xs" ng-click="cropInit()">Cortar</button>
+												<button class="btn btn-xs" ng-click="moveLayerUp()">Traer adelante</button>
+												<button class="btn btn-xs" ng-click="moveLayerToFront()">Traer al Frente</button>
+												<button class="btn btn-xs" ng-click="moveLayerDown()">Enviar atrás</button>
+												<button class="btn btn-xs" ng-click="moveLayerToBehind()">Enviar al Fondo</button>
+												<button class="btn btn-xs" ng-click="deleteLayer()">Borrar</button>
+											</div>
+											<div class="box-ground">
+												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true, onOver: 'dropCallback'}" >
+													<div class="draggable" ng-repeat="item in box track by $index" resizable on-resize="resize($evt, $ui)" on-drag="drag($evt, $ui)" zindex="item.zindex"ng-mousedown="setActive($index)">
+														<img src="{{item.url_m}}" >
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="crop" ng-controller="CropCtrl" ng-class="isActive( status )">
+											<div class="crop-header">
+												<button class="btn btn-xs" ng-click="createNewImage()">Listo</button>
+												<button class="btn btn-xs" ng-click="setCropStatus(0)">Cancelar</button>
+											</div>
+											<div class="crop-image">
+												<canvas width="0" height="0" id="myCanvas" style="position:relative;left:{{image.position.left}}px;top:{{image.position.top}}px;"></canvas>
+												<div class="canvas-layer">
+													<div class="wrap">
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
-									<div ng-show="w">{{w}}:{{h}}px</div>
+								</div>
+
+								<div ng-show="w">{{w}}:{{h}}px</div>
 							</div>
 						</div>
 					</div>

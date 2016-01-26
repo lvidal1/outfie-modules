@@ -5,7 +5,7 @@ $sand-green-color: #03d4ad;
 		padding : 15px;
 		float:left;
 		width:50%;
-		min-height: 510px;
+		height: 510px;
 		margin-bottom: 50px;
     	border-bottom: 1px solid $sand-border-color ;
     	&:nth-child(1){
@@ -14,12 +14,72 @@ $sand-green-color: #03d4ad;
 		.products-page {
 		    min-height: 400px;
 		}
-		>.wrap{
-			width:100%;
-			height:460px;
-		}
 		#sand-ground{
 			position:relative;
+		}
+		.sand-wrap{
+			width:100%;
+			height: 100%;
+			position:relative;
+		}
+		.box {
+		    width: 100%;
+		    height: 100%;
+		    position: relative;
+		    z-index: 1;
+		    .box-header {
+		        position: absolute;
+		        height: 30px;
+		        width: 100%;
+		        z-index:1;
+		    }
+		    .box-ground {
+		        width: 100%;
+		        height: 100%;
+		        padding-top: 30px;
+		        .wrap{
+        			width:100%;
+        			height: 100%;
+        		}
+		    }
+		}
+		.crop {
+		    position: absolute;
+		    width: 100%;
+		    height: 100%;
+		    top: 0;
+		    background-color: rgba(3, 212, 173, 0.54);
+		    display:none;
+		    &.active{
+		    	display:block;
+		    	z-index: 2;
+		    }
+		    .crop-header {
+		        position: absolute;
+		        width: 100%;
+		        height: 30px;
+		        background-color: white;
+		        z-index:1;
+		    }
+		    .crop-image {
+		        width: 100%;
+		        height: 100%;
+		        padding-top: 30px;
+		        position: relative;
+		    }
+		}
+
+		
+
+		.canvas-layer{
+			position:absolute;
+			pointer-events:none;
+			margin-top:30px;
+			.wrap{
+				position: relative;
+				width: 100%;
+				height: 100%;
+			}
 		}
 	}
 	.sand-image{
