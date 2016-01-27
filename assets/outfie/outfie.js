@@ -24,7 +24,7 @@ var $config = {
 		}
 	}
 
-angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPagination','ngDragDrop'])
+angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPagination','ngDragDrop','rt.select2'])
 	.factory("mainService", function($http,$location,$window){
 		var categories = [];
 		var subcategories = [];
@@ -342,19 +342,39 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		$scope.categories = [];
 		$scope.subcategories = [];
 		$scope.range = {};
+		$scope.search=[];
+		$scope.field={};
 
 		// Call xhr promise for categories from mainService
 		mainService.data.get().then(function(d) { 
-			
-			$scope.range = mainService.range.set( d.range );
 
-			mainService.config.set( "range" , $scope.range );
-
-			// Set categories to mainService and then get them from mainService
-			$scope.categories = mainService.categories.set( d.categories );
-			// Set default category to 'active' from config
-			$scope.setCategoryActive( 0 );
-
+			if(d.categories != undefined){
+				// Set categories to mainService and then get them from mainService
+				$scope.categories = mainService.categories.set( d.categories );
+				// Set default category to 'active' from config
+				$scope.setCategoryActive( 0 );
+			}
+			if(d.range != undefined){
+				$scope.range = mainService.range.set( d.range );
+				mainService.config.set( "range" , $scope.range );
+			}
+			if(d.search != undefined){
+				var search = d.search;
+				if( search.stores != undefined ){
+					var stores = {id:0,text:"Tiendas",children:[]};
+					for (var i = 0; i < search.stores.length; i++) {
+						stores.children.push( search.stores[i] );
+					};
+					$scope.search.push( stores );
+				}
+				if( search.brands != undefined ){
+					var brands = {id:0,text:"Tiendas",children:[]};
+					for (var i = 0; i < search.brands.length; i++) {
+						brands.children.push( search.brands[i] );
+					};
+					$scope.search.push( brands );
+				}
+			}
 		});
 
 		$scope.setCategoryActive = function( index , item){

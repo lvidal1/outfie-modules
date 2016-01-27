@@ -150,5 +150,19 @@
 		"max": 600,
 		"from": 50,
 		"to": 500
+	},
+	"search":{
+		"stores":[
+			{"id":0,"text":"Tienda 1"},
+			{"id":1,"text":"Tienda 2"},
+			{"id":2,"text":"Tienda 3"},
+			{"id":3,"text":"Tienda 4"}
+		],
+		"brands":[
+			{"id":0,"text":"Marca 1"},
+			{"id":1,"text":"Marca 2"},
+			{"id":2,"text":"Marca 3"},
+			{"id":3,"text":"Marca 4"}
+		]
 	}
 }
