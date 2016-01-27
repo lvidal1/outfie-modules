@@ -223,8 +223,8 @@
 											<div class="clothing-filters__search section">
 												<h4>Buscar tienda / marca</h4>
 												<form class="search-form" role="search">
-													<div class="input-group">
-														<select class="search-text form-control" select2 multiple="multiple" >
+													<div class="input-group" style="width:100%">
+														<select class="search-text form-control" select2 multiple="multiple" style="width:100%">
 															
 														</select>
 														<!-- <div class="input-group-btn">
@@ -246,16 +246,18 @@
 								<p>{{config.range.from}} | {{config.range.to}}</p> -->
 								<div class="sand-section">
 									<div class="products-page">
-										<div class="sand-image" dir-paginate="item in products  | filter: {cat : config.category.id}:true |  filter: {sub : config.subcategory.id}:true | filter:byPrice('price') | itemsPerPage: pageSize" current-page="currentPage"
+										<div class="sand-image" dir-paginate="item in filtered = (products  | filter: {cat : config.category.id}:true |  filter: {sub : config.subcategory.id}:true | filter:byPrice('price') | filter:byStore('store') | filter:byBrand('brand') ) | itemsPerPage: pageSize" current-page="currentPage"
 										data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="products" jqyoui-draggable="{index:$index,applyFilter:'{{currentPage}}-{{pageSize}}',placeholder: 'keep',deepCopy :true}">
 							                <div class="wrap">
 							                	<div class="info">
 							                		<span>{{item.cat}}-{{item.sub}}</span>
 							                		<span>${{item.price}}</span>
+							                		<span>T:{{item.store}} - {{item.brand}}</span>
 							                	</div>
 							                	<img src="{{item.url_m}}">
 							                </div>
 							            </div>
+							            <div class="text-center" ng-show="!filtered.length">No hay productos con tu selección</div>
 							            <div class="clearfix"></div>
 									</div>
 						            <div class="products-pagination">

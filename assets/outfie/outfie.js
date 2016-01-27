@@ -9,7 +9,9 @@ var ROOT_PROCESSCROP = "ws.processCrop.php"
 var $config = {
 		category :    ST_INACTIVE,
 		subcategory : ST_INACTIVE,
-		xhrProducts : ST_ACTIVE,
+		store: ST_INACTIVE,
+		brand: ST_INACTIVE,
+		xhrProducts : ST_INACTIVE,
 		sandbox: {
 			pagination:{
 				currentPage : 1,
@@ -357,11 +359,62 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				scope.$watch(function () {
 					return mainService.config.get().done;
 				},function(n,o){
-					
-					console.log(mainService.config.get().search);
 	        		// Call sliders update method with any params
 	        		elem.select2({data: mainService.config.get().search});
 	        	});
+
+	        	elem.on("select2:select", function (e) {
+	        		scope.$apply(function() {
+		        		var $this = $(elem);
+		        		var $item = e.params.data.id;
+		        		var $tmp = $item.split("-");
+						switch($tmp[0]){
+	        				case "0":
+	        					mainService.config.set( "store", $item);
+	        				break;
+	        				case "1":
+	        					mainService.config.set( "brand", $item);
+	        				break;
+	        			}
+	        			var store = mainService.config.get().store;
+	        			var brand = mainService.config.get().brand;
+	        			var data = [];
+
+		        		if( store != ST_INACTIVE ){
+		        			data.push(store);
+		        		}
+		        		if( brand != ST_INACTIVE ){
+		        			data.push(brand);
+		        		}
+		        		$this.val(data).trigger("change");
+	        		});
+				});
+				elem.on("select2:unselect", function (e,a) {
+					scope.$apply(function() {
+						var $this = $(elem);
+						var $item = e.params.data.id;
+						var $tmp = $item.split("-");
+						switch($tmp[0]){
+	        				case "0":
+	        					mainService.config.set( "store", ST_INACTIVE);
+	        				break;
+	        				case "1":
+	        					mainService.config.set( "brand", ST_INACTIVE);
+	        				break;
+	        			}
+	        			var store = mainService.config.get().store;
+	        			var brand = mainService.config.get().brand;
+	        			var data = [];
+
+	        			if( store != ST_INACTIVE ){
+	        				data.push(store);
+	        			}
+	        			if( brand != ST_INACTIVE ){
+	        				data.push(brand);
+	        			}
+	        			$this.val(data).trigger("change");
+        			});
+				});
 
 	        }
 	    }
@@ -373,7 +426,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		$scope.subcategories = [];
 		$scope.range = {};
 		$scope.search=[];
-		$scope.field={};
 		$scope.identifiers = {store:0,brand:1};
 
 		// Call xhr promise for categories from mainService
@@ -407,9 +459,9 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 					};
 					$scope.search.push( brands );
 				}
-				console.log($scope.search)
 				$scope.search = mainService.search.set( $scope.search );
 				mainService.config.set( "search" , $scope.search );
+
 			}
 
 			mainService.config.set( "done" , ST_ACTIVE );
@@ -465,7 +517,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    				cat[i].ch[j] = {id:$scope.categories[i].subcategories[j].id};
 	    			};
 	    		};
-	    		console.log(cat);
 	    	});
 	        $scope.getSand().then(function(a){
 	        	// Simulate category and subcat$scope.config.get().category[i]
@@ -475,7 +526,9 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
         			var RandSub = Math.floor(Math.random() * ((cat[RandCat].ch.length-1) - 0 + 1)) + 0;
         			a[i].cat = cat[RandCat].id;
         			a[i].sub = cat[RandCat].ch[RandSub].id;
-        			a[i].price = Math.floor(Math.random() * (600 - 50 + 1)) + 50
+        			a[i].price = Math.floor(Math.random() * (600 - 50 + 1)) + 50;
+        			a[i].store = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
+        			a[i].brand = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
         		};
 
         		//console.log(JSON.stringify(a));
@@ -489,16 +542,35 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        });
 	    });
 
-		$scope.$watch("mainService.config.range.to", function(o,n,e) {
-			console.log(o);
-			$scope.config.range = mainService.config.get().range;
-		})
 		$scope.byPrice = function (fieldName) {
 			var minValue = $scope.config.range.from;
 			var maxValue = $scope.config.range.to;
-
 			return function predicateFunc(item) {
 		    	return minValue <= item[fieldName] && item[fieldName] <= maxValue;
+			};
+		};
+		$scope.byStore = function (fieldName) {
+			var configStore = $scope.config.store;
+			return function predicateFunc(item) {
+				if( configStore != ST_INACTIVE){
+					var key = configStore.split("-");
+		    		return key[1] == item[fieldName];
+				}else{
+					return true;
+				}
+				
+			};
+		};
+		$scope.byBrand = function (fieldName) {
+			var configBrand = $scope.config.brand;
+			return function predicateFunc(item) {
+				if( configBrand != ST_INACTIVE){
+					var key = configBrand.split("-");
+		    		return key[1] == item[fieldName];
+				}else{
+					return true;
+				}
+				
 			};
 		};
 		$scope.getSand = function(){
