@@ -21,14 +21,17 @@ var $config = {
 			max: 0,
 			from: 0,
 			to: 0
-		}
+		},
+		search:[],
+		done : ST_INACTIVE
 	}
 
-angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPagination','ngDragDrop','rt.select2'])
+angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPagination','ngDragDrop'])
 	.factory("mainService", function($http,$location,$window){
 		var categories = [];
 		var subcategories = [];
 		var range = {};
+		var search = [];
 		var config = $config;
 
 	  	var xhrData = $http.get(ROOT_PATH + ROOT_GETDATA).then(function(d) { 
@@ -85,6 +88,15 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				set : function( $range ){
 					range = $range;
 					return range;
+				}
+	  		},
+	  		search:{
+	  			get: function(){
+		  			return search;
+				},
+				set : function( $search ){
+					search = $search;
+					return search;
 				}
 	  		}
 			
@@ -286,7 +298,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        }
 	    };
 	  })
-	.directive('ionrangeslider', function (mainService) {
+	.directive('ionrangeslider',['$timeout','mainService', function ($timeout,mainService) {
 	    return {
 	        restrict: 'A',
 	        scope: {},
@@ -318,12 +330,12 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        	scope.rangeOptions = scope.getOption( mainService.config.get().range );
 	        	elem.ionRangeSlider( scope.rangeOptions );
 	        	elem.on("change", function () {
-				   	scope.$apply(function() {
+				   	$timeout(function() {
 				   		var $this = $(elem),
 				        value = $this.prop("value").split(";");
 				    	scope.$parent.range.from=parseInt(value[0]);
 				   	 	scope.$parent.range.to=parseInt(value[1]);
-					})
+					},0);
 				});
 
 	        	scope.$parent.$watch('range',function(n,o){
@@ -331,8 +343,26 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        		scope.rangeOptions = scope.getOption( n );
 	        		var slider = elem.data("ionRangeSlider");
 					slider.update( scope.rangeOptions );
-	        		
 	        	});
+	        }
+	    }
+	}])
+	.directive('select2', function (mainService) {
+	    return {
+	        restrict: 'A',
+	        link: function (scope, elem, attrs) {
+	        	
+
+	        	elem.select2( {data : [] } );
+				scope.$watch(function () {
+					return mainService.config.get().done;
+				},function(n,o){
+					
+					console.log(mainService.config.get().search);
+	        		// Call sliders update method with any params
+	        		elem.select2({data: mainService.config.get().search});
+	        	});
+
 	        }
 	    }
 	})
@@ -344,6 +374,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		$scope.range = {};
 		$scope.search=[];
 		$scope.field={};
+		$scope.identifiers = {store:0,brand:1};
 
 		// Call xhr promise for categories from mainService
 		mainService.data.get().then(function(d) { 
@@ -361,20 +392,27 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			if(d.search != undefined){
 				var search = d.search;
 				if( search.stores != undefined ){
-					var stores = {id:0,text:"Tiendas",children:[]};
+					var stores = {id:$scope.identifiers.store,text:"Tiendas",children:[]};
 					for (var i = 0; i < search.stores.length; i++) {
+						search.stores[i].id = $scope.identifiers.store+'-'+search.stores[i].id;
 						stores.children.push( search.stores[i] );
 					};
 					$scope.search.push( stores );
 				}
 				if( search.brands != undefined ){
-					var brands = {id:0,text:"Tiendas",children:[]};
+					var brands = {id:$scope.identifiers.brand,text:"Marcas",children:[]};
 					for (var i = 0; i < search.brands.length; i++) {
+						search.brands[i].id = $scope.identifiers.brand+'-'+search.brands[i].id;
 						brands.children.push( search.brands[i] );
 					};
 					$scope.search.push( brands );
 				}
+				console.log($scope.search)
+				$scope.search = mainService.search.set( $scope.search );
+				mainService.config.set( "search" , $scope.search );
 			}
+
+			mainService.config.set( "done" , ST_ACTIVE );
 		});
 
 		$scope.setCategoryActive = function( index , item){
@@ -440,7 +478,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
         			a[i].price = Math.floor(Math.random() * (600 - 50 + 1)) + 50
         		};
 
-        		console.log(JSON.stringify(a));
+        		//console.log(JSON.stringify(a));
 
 	        	$scope.products = a;
 	        });
