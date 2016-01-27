@@ -9,12 +9,18 @@ var ROOT_PROCESSCROP = "ws.processCrop.php"
 var $config = {
 		category :    ST_INACTIVE,
 		subcategory : ST_INACTIVE,
-		xhrProducts : ST_INACTIVE,
+		xhrProducts : ST_ACTIVE,
 		sandbox: {
 			pagination:{
 				currentPage : 1,
 				pageSize: 20
 			}
+		},
+		range:{
+			min: 0,
+			max: 0,
+			from: 0,
+			to: 0
 		}
 	}
 
@@ -22,9 +28,10 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	.factory("mainService", function($http,$location,$window){
 		var categories = [];
 		var subcategories = [];
+		var range = {};
 		var config = $config;
 
-	  	var xhrCatergories = $http.get(ROOT_PATH + ROOT_GETDATA).then(function(d) { 
+	  	var xhrData = $http.get(ROOT_PATH + ROOT_GETDATA).then(function(d) { 
 			return d.data
 		});
 	  	return {
@@ -36,13 +43,14 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	  				config[attr] = val;
 	  			}
 	  		},
+	  		data:{
+	  			get:function(){
+	  				return xhrData;
+	  			}
+	  		},
 	  		categories:{
 	  			get: function(){
-		  			if( categories.length > 0){
-		  				return categories;
-		  			}else{
-		  				return xhrCatergories;
-		  			}
+					return categories;
 				},
 				set : function( $categories ){
 					categories = $categories;
@@ -68,6 +76,15 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 						subcategories[i].status = ST_INACTIVE;
 					};
 					subcategories[index].status = ST_ACTIVE;
+				}
+	  		},
+	  		range:{
+	  			get: function(){
+		  			return range;
+				},
+				set : function( $range ){
+					range = $range;
+					return range;
 				}
 	  		}
 			
@@ -161,7 +178,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    };
 	}])
 	.directive('resizable', function () {
-
 	    return {
 	        restrict: 'A',
 	        scope: {
@@ -270,29 +286,89 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        }
 	    };
 	  })
+	.directive('ionrangeslider', function (mainService) {
+	    return {
+	        restrict: 'A',
+	        scope: {},
+	        link: function postLink(scope, elem, attrs) {
+	        	var merge = function() {
+	        	    var obj = {},
+	        	        i = 0,
+	        	        il = arguments.length,
+	        	        key;
+	        	    for (; i < il; i++) {
+	        	        for (key in arguments[i]) {
+	        	            if (arguments[i].hasOwnProperty(key)) {
+	        	                obj[key] = arguments[i][key];
+	        	            }
+	        	        }
+	        	    }
+	        	    return obj;
+	        	};
+	        	scope.getOption = function(customOptions){
+	        		var defaultOptions = {
+	        			type: "double",
+	        			hide_min_max: true,
+	        			hide_from_to: false,
+	        			grid: false
+	        		}
+	        		return merge(defaultOptions, customOptions);
+	        	}
+
+	        	scope.rangeOptions = scope.getOption( mainService.config.get().range );
+	        	elem.ionRangeSlider( scope.rangeOptions );
+	        	elem.on("change", function () {
+				   	scope.$apply(function() {
+				   		var $this = $(elem),
+				        value = $this.prop("value").split(";");
+				    	scope.$parent.range.from=parseInt(value[0]);
+				   	 	scope.$parent.range.to=parseInt(value[1]);
+					})
+				});
+
+	        	scope.$parent.$watch('range',function(n,o){
+	        		// Call sliders update method with any params
+	        		scope.rangeOptions = scope.getOption( n );
+	        		var slider = elem.data("ionRangeSlider");
+					slider.update( scope.rangeOptions );
+	        		
+	        	});
+	        }
+	    }
+	})
 	.controller('FilterCtrl',function FilterCtrl($scope,$location,mainService){
 
 		// Containers - Scope
 		$scope.categories = [];
 		$scope.subcategories = [];
+		$scope.range = {};
 
 		// Call xhr promise for categories from mainService
-		mainService.categories.get().then(function(d) { 
+		mainService.data.get().then(function(d) { 
+			
+			$scope.range = mainService.range.set( d.range );
+
+			mainService.config.set( "range" , $scope.range );
+
 			// Set categories to mainService and then get them from mainService
 			$scope.categories = mainService.categories.set( d.categories );
 			// Set default category to 'active' from config
 			$scope.setCategoryActive( 0 );
+
 		});
 
 		$scope.setCategoryActive = function( index , item){
 			$scope.subcategories = mainService.subcategories.set( $scope.categories[index].subcategories );
-			mainService.config.get().category = item;
+			if( item == undefined ){
+				var item = $scope.categories[index];
+			}
+			mainService.config.set( "category" , item );
 			mainService.categories.setActive( index );
 
 			$scope.setSubCategoryActive( 0 );
 		}
 		$scope.setSubCategoryActive = function( index , item){
-			mainService.config.get().subcategory = item;
+			mainService.config.set( "subcategory" , item );
 			mainService.subcategories.setActive( index );
 		}
 		$scope.isActive = function( categoryStatus ){
@@ -315,34 +391,36 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		$scope.boxItemModelActive = false;
 
 		$scope.config = mainService.config.get();
-
-		$scope.categories = mainService.categories.get();
-
+		var cat = []
+		
 		$scope.currentPage = mainService.config.get().sandbox.pagination.currentPage;
   		$scope.pageSize = mainService.config.get().sandbox.pagination.pageSize;
 
   		// Connection with filter bar
 	    $scope.$watch("mainService.config.subcategory", function(o,n,e) {
+	    	mainService.data.get().then(function(a){
+	    		$scope.categories = a.categories;
+	    		cat = [];
+	    		for (var i = 0; i < $scope.categories.length; i++) {
+	    			cat[i] = {id:$scope.categories[i].id,ch:[]} ;
+	    			for (var j = 0; j < $scope.categories[i].subcategories.length; j++) {
+	    				cat[i].ch[j] = {id:$scope.categories[i].subcategories[j].id};
+	    			};
+	    		};
+	    		console.log(cat);
+	    	});
 	        $scope.getSand().then(function(a){
 	        	// Simulate category and subcat$scope.config.get().category[i]
-	        		var cat = [];
-	        		for (var i = 0; i < $scope.categories.length; i++) {
-	        			cat.push( {id:$scope.categories[i].id,ch:[]} );
-	        			for (var j = 0; j < $scope.categories[i].subcategories.length; j++) {
-	        				cat[i].ch({id:$scope.categories[i].subcategories[j].id});
-	        			};
-	        		};
-	        		console.log ( $scope.categories );
-
-	        		for (var i = 0; i < a.length; i++) {
-	        			var RandCat = Math.floor(Math.random() * (cat.length-1 - 0 + 1)) + 0;
-	        			var RandSub = Math.floor(Math.random() * (cat[RandCat].length - 0 + 1)) + 0;
 	        		
-	        			a.cat = cat[RandCat].id;
-	        			a.sub = cat[RandCat].ch[RandSub].id;
-	        		};
+        		for (var i = 0; i < a.length; i++) {
+        			var RandCat = Math.floor(Math.random() * ((cat.length-1) - 0 + 1)) + 0;
+        			var RandSub = Math.floor(Math.random() * ((cat[RandCat].ch.length-1) - 0 + 1)) + 0;
+        			a[i].cat = cat[RandCat].id;
+        			a[i].sub = cat[RandCat].ch[RandSub].id;
+        			a[i].price = Math.floor(Math.random() * (600 - 50 + 1)) + 50
+        		};
 
-	        		console.log(a);
+        		console.log(JSON.stringify(a));
 
 	        	$scope.products = a;
 	        });
@@ -352,6 +430,19 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        	}
 	        });
 	    });
+
+		$scope.$watch("mainService.config.range.to", function(o,n,e) {
+			console.log(o);
+			$scope.config.range = mainService.config.get().range;
+		})
+		$scope.byPrice = function (fieldName) {
+			var minValue = $scope.config.range.from;
+			var maxValue = $scope.config.range.to;
+
+			return function predicateFunc(item) {
+		    	return minValue <= item[fieldName] && item[fieldName] <= maxValue;
+			};
+		};
 		$scope.getSand = function(){
 
 			var url, item, first;
@@ -364,9 +455,10 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 					  "method": "flickr.photos.search", 
 					  "format": "json",
 					  "nojsoncallback": "1",
-					  "text": "Arawys mujer",
+					  "text": "women clothes",
 					  "content_type": "1",
 					  "extras":'url_m',
+					  "per_page":"300",
 					  "color_codes":"c"
 					}
 					url = "https://api.flickr.com/services/rest/";

@@ -218,17 +218,17 @@
 											</div>
 											<div class="clothing-filters__price-range section">
 												<h4>Rango de precios $50 - $650</h4>
-												<input id="price-range" class="hide irs-hidden-input" readonly>
+												<input id="price-range" class="hide irs-hidden-input" readonly ionrangeslider>
 											</div>
 											<div class="clothing-filters__search section">
 												<h4>Buscar tienda / marca</h4>
 												<form class="search-form" role="search">
-														<div class="input-group">
-																<input type="text" class="form-control" placeholder="Search" name="q">
-																<div class="input-group-btn">
-																		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-																</div>
+													<div class="input-group">
+														<input type="text" class="form-control" placeholder="Search" name="q">
+														<div class="input-group-btn">
+															<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
 														</div>
+													</div>
 												</form>
 											</div>
 											<div class="clothing-filters__color section">
@@ -237,14 +237,20 @@
 										</div>
 									</div>
 								</div>
+								<!-- <p>{{range.from}} | {{range.to}}</p> -->
 							</div>
 							<div class="app-sandbox" ng-controller="SandCtrl">
-								
+								<!-- <p>{{config.category.id}} | {{config.subcategory.id}}</p>
+								<p>{{config.range.from}} | {{config.range.to}}</p> -->
 								<div class="sand-section">
 									<div class="products-page">
-										<div class="sand-image" dir-paginate="item in products | itemsPerPage: pageSize | filter: {cat : config.category.id}" current-page="currentPage"
+										<div class="sand-image" dir-paginate="item in products  | filter: {cat : config.category.id}:true |  filter: {sub : config.subcategory.id}:true | filter:byPrice('price') | itemsPerPage: pageSize" current-page="currentPage"
 										data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="products" jqyoui-draggable="{index:$index,applyFilter:'{{currentPage}}-{{pageSize}}',placeholder: 'keep',deepCopy :true}">
 							                <div class="wrap">
+							                	<div class="info">
+							                		<span>{{item.cat}}-{{item.sub}}</span>
+							                		<span>${{item.price}}</span>
+							                	</div>
 							                	<img src="{{item.url_m}}">
 							                </div>
 							            </div>
@@ -370,16 +376,16 @@
 			/*  [ Ion Range Slider ]
 			- - - - - - - - - - - - - - - - - - - - */	
 			
-			$("#price-range").ionRangeSlider({
-				type: "double",
-				min: 50,
-				max: 650,
-				from: 1200,
-				to: 1800,
-				hide_min_max: true,
-				hide_from_to: false,
-				grid: false
-			});
+			// $("#price-range").ionRangeSlider({
+			// 	type: "double",
+			// 	min: 50,
+			// 	max: 650,
+			// 	from: 1200,
+			// 	to: 1800,
+			// 	hide_min_max: true,
+			// 	hide_from_to: false,
+			// 	grid: false
+			// });
 			
 			
 		})(jQuery);
