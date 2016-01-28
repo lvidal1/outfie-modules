@@ -234,7 +234,9 @@
 												</form>
 											</div>
 											<div class="clothing-filters__color section">
-											
+												<h4>Color</h4>
+												<input type='text' class="basic" colorpicker/>
+												<button class="btn btn-sm" title="Limpiar color" id="btnClearColor"ng-click="clearColor()">x</button>
 											</div>
 										</div>
 									</div>
@@ -246,13 +248,14 @@
 								<p>{{config.range.from}} | {{config.range.to}}</p> -->
 								<div class="sand-section">
 									<div class="products-page">
-										<div class="sand-image" dir-paginate="item in filtered = (products  | filter: {cat : config.category.id}:true |  filter: {sub : config.subcategory.id}:true | filter:byPrice('price') | filter:byStore('store') | filter:byBrand('brand') ) | itemsPerPage: pageSize" current-page="currentPage"
-										data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="products" jqyoui-draggable="{index:$index,applyFilter:'{{currentPage}}-{{pageSize}}',placeholder: 'keep',deepCopy :true}">
+										<div class="sand-image" dir-paginate="item in filtered = (products  | filter: {cat : config.category.id}:true |  filter: {sub : config.subcategory.id}:true | filter:byPrice('price') | filter:byStore('store') | filter:byBrand('brand') | filter:byColor('color')) | itemsPerPage: pageSize" current-page="currentPage"
+										data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="products" jqyoui-draggable="{index:$index,applyFilter:'{{getIndex(item)}}',placeholder: 'keep',deepCopy :true}">
 							                <div class="wrap">
 							                	<div class="info">
 							                		<span>{{item.cat}}-{{item.sub}}</span>
 							                		<span>${{item.price}}</span>
 							                		<span>T:{{item.store}} - {{item.brand}}</span>
+							                		<span style="width:10px;height:10px;display: inline-block;float: left;left: 0px;background-color:{{item.color}}"></span>
 							                	</div>
 							                	<img src="{{item.url_m}}">
 							                </div>
@@ -281,7 +284,7 @@
 											</div>
 											<div class="box-ground">
 												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true, onOver: 'dropCallback'}" >
-													<div class="draggable" ng-repeat="item in box track by $index" resizable on-resize="resize($evt, $ui)" on-drag="drag($evt, $ui)" zindex="item.zindex"ng-mousedown="setActive($index)">
+													<div class="draggable" ng-repeat="item in box track by $index" resizable item="item" on-resize="resize($evt, $ui)" on-drag="drag($evt, $ui)" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" >
 														<img src="{{item.url_m}}" >
 													</div>
 												</div>
@@ -332,17 +335,20 @@
 	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
 	<!-- Scrolltofixed -->
 	<!--<script src="assets/scrolltofixed/jquery-scrolltofixed.js"></script>-->
+	<script src="assets/jqueryui/jquery-ui.min.js"></script>
+	
+	<!-- Outfie -->
 	<!-- Owlcarousel -->
 	<script src="assets/carousel/owl.carousel.js"></script>
 	<!-- Ion Range Slider-->
   	<script type="text/javascript" src="assets/rangeslider/js/ion.rangeSlider.min.js"></script>
-	<!-- Outfie -->
-
-	<script src="assets/jqueryui/jquery-ui.min.js"></script>
-
+	<!-- Select 2 -->
 	<link rel="stylesheet" type="text/css" href="assets/select2/css/select2.min.css">
 	<script src="assets/select2/js/select2.min.js"></script>
-
+	<!-- Spectrum -->
+	<link rel="stylesheet" type="text/css" href="assets/spectrum/spectrum.css">
+	<script src="assets/spectrum/spectrum.js"></script>
+	<!-- Angular dependencies -->
 	<script src="assets/angular/angular.min.js"></script>
 	<script src="assets/angular/angular.route.js"></script>
 	<script src="assets/angular/angular-animate.js"></script>

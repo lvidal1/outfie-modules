@@ -25,6 +25,8 @@ var $config = {
 			to: 0
 		},
 		search:[],
+		colors:[],
+		color:ST_INACTIVE,
 		done : ST_INACTIVE
 	}
 
@@ -34,6 +36,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		var subcategories = [];
 		var range = {};
 		var search = [];
+		var colors = [];
 		var config = $config;
 
 	  	var xhrData = $http.get(ROOT_PATH + ROOT_GETDATA).then(function(d) { 
@@ -99,6 +102,15 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				set : function( $search ){
 					search = $search;
 					return search;
+				}
+	  		},
+	  		colors:{
+	  			get: function(){
+		  			return colors;
+				},
+				set : function( $colors ){
+					colors = $colors;
+					return colors;
 				}
 	  		}
 			
@@ -197,9 +209,12 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        scope: {
 	            callresize: '&onResize',
 	            calldrag : '&onDrag',
-	            zindex:      '='  
+	            zindex:      '=',
+	            item: '=' 
 	        },
 	        link: function postLink(scope, elem, attrs) {
+
+	        	var index = scope.$parent.$parent.box.indexOf(scope.item);
 
 	        	elem.draggable({
 			        cursor      : "move",
@@ -215,7 +230,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			    // Reposition elements after render
 				scope.reposition = function(){
 					// Set position
-					if( typeof scope.$parent.item.position === 'undefined' ){
+					if( typeof scope.$parent.$parent.box[index].position === 'undefined' ){
 						//TODO : Image should appear where is dropped
 						elem.find("img").load(function() {
 							var containment = $("#sand-ground");
@@ -229,32 +244,34 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 							var left = ( cWidth - width )/ 2;
 							var top = ( cHeight - height )/ 2;
 
-							scope.$parent.item.size = {width:width,height:height};
-							scope.$parent.item.position = {left:left,top:top};
+							scope.$parent.$parent.box[index].size = {width:width,height:height};
+							scope.$parent.$parent.box[index].position = {left:left,top:top};
 
 							elem.css({left:left,top:top});
 						});
+						console.log("NO HAY POSICION");
 					}else{
-						var pos = scope.$parent.item.position;
+						var pos = scope.$parent.$parent.box[index].position;
 						var left = pos.left;
 						var top = pos.top;
 						elem.css({left:left,top:top});
+						console.log("WHAT DAFAQ" , pos);
 					}
 					// Set dimension
-					if( typeof scope.$parent.item.size !== 'undefined' ){
-						var size = scope.$parent.item.size;
+					if( typeof scope.item.size !== 'undefined' ){
+						var size = scope.$parent.$parent.box[index].size;
 						var width = size.width;
 						var height = size.height;
 						elem.css({width:width,height:height});
 					}
 					// Set z-index position
-					if( typeof scope.$parent.item.zindex !== 'undefined' ){
-						var zindex = scope.$parent.item.zindex;
+					if( typeof scope.item.zindex !== 'undefined' ){
+						var zindex = scope.item.zindex;
 						elem.css("z-index",zindex);
 					}else{
 						var cantSiblings = scope.$parent.$parent.box.length;
-						scope.$parent.item.zindex = cantSiblings;
-						var zindex = scope.$parent.item.zindex;
+						scope.$parent.$parent.box[index].zindex = cantSiblings;
+						var zindex = scope.$parent.$parent.box[index].zindex;
 						elem.css("z-index",zindex);
 					}
 				}
@@ -266,25 +283,33 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 					setTimeout(function(){
 						elem.css("z-index",n);
 						scope.reposition();
-					})
+					},0)
+					return n;
+			    });
+			    scope.$parent.$watch("item.position", function(n,o,e) {
+					setTimeout(function(){
+						console.log("VALOR ANTERIOR",n);
+						console.log("VALOR NUEVO",o);
+						scope.reposition();
+					},0)
 					return n;
 			    });
 
 	            elem.on('resize', function (evt, ui) {
-	              	scope.$apply(function() {
+	              	setTimeout(function(){
 						// Update position and size when resizing
-	              		scope.$parent.item.size = ui.size;
-	              		scope.$parent.item.position = ui.position;
+	              		scope.$parent.$parent.box[index].size = ui.size;
+	              		scope.$parent.$parent.box[index].position = ui.position;
 	              		// Remove : Call helper	
 	                	if (scope.callresize) { 
 	                  		scope.callresize({$evt: evt, $ui: ui }); 
 	                	}                
-	              	})
+	              	},0)
 	            });
 	            elem.on('drag', function (evt, ui) {
-	              	scope.$apply(function() {
+	              	setTimeout(function(){
 	              		// Update position when dragging
-	             		scope.$parent.item.position = ui.position;
+	             		scope.$parent.$parent.box[index].position = ui.position;
 						// Remove : Call helper	
 	                	if (scope.calldrag) { 
 	                  		scope.calldrag({$evt: evt, $ui: ui }); 
@@ -353,14 +378,11 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    return {
 	        restrict: 'A',
 	        link: function (scope, elem, attrs) {
-	        	
-
 	        	elem.select2( {data : [] } );
 				scope.$watch(function () {
 					return mainService.config.get().done;
 				},function(n,o){
-	        		// Call sliders update method with any params
-	        		elem.select2({data: mainService.config.get().search});
+	        		elem.select2({data: mainService.search.get()});
 	        	});
 
 	        	elem.on("select2:select", function (e) {
@@ -415,17 +437,49 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        			$this.val(data).trigger("change");
         			});
 				});
-
 	        }
 	    }
 	})
-	.controller('FilterCtrl',function FilterCtrl($scope,$location,mainService){
+	.directive('colorpicker', function (mainService) {
+	    return {
+	        restrict: 'A',
+	        link: function (scope, elem, attrs) {
+
+	        	scope.$watch(function () {
+					return mainService.config.get().done;
+				},function(n,o){
+		        	elem.spectrum({
+					    showPaletteOnly: true,
+				        showPalette:true,
+				        allowEmpty:true,
+				        preferredFormat: "hex",
+				        palette: mainService.colors.get(),
+				        change: function(color) {
+					        scope.changeColor( color.toHexString() );
+					    }
+					});
+	        	});
+	        	
+				scope.changeColor = function( color ){
+					scope.$apply(function() {
+						mainService.config.set( "color", color);
+					});
+				}
+				$("#btnClearColor").on('click',function(){
+					$(".sp-clear.sp-clear-display").trigger("click");
+					elem.spectrum("hide");
+				})
+	       }
+	    }
+	})        
+	.controller('FilterCtrl',function FilterCtrl($scope,$location,$timeout,mainService){
 
 		// Containers - Scope
 		$scope.categories = [];
 		$scope.subcategories = [];
 		$scope.range = {};
 		$scope.search=[];
+		$scope.colors=[];
 		$scope.identifiers = {store:0,brand:1};
 
 		// Call xhr promise for categories from mainService
@@ -460,8 +514,21 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 					$scope.search.push( brands );
 				}
 				$scope.search = mainService.search.set( $scope.search );
-				mainService.config.set( "search" , $scope.search );
 
+			}
+			if(d.colors != undefined){
+				var colors = d.colors;
+				var set = [];
+				for (var i = 0; i < colors.length; i++) {
+					if(i == Math.floor(colors.length/2)){
+						$scope.colors.push(set);
+						set = [];
+					}
+					set.push(colors[i]);
+				};
+				$scope.colors.push(set);
+				mainService.config.set( "colors",  d.colors );
+				$scope.colors = mainService.colors.set( $scope.colors );
 			}
 
 			mainService.config.set( "done" , ST_ACTIVE );
@@ -488,9 +555,14 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				return ''
 			}
 		}
+		$scope.clearColor = function(){
+			$timeout(function() {
+				mainService.config.get().color = ST_INACTIVE;
+			},0);
+		}
 		
 	})
-	.controller('SandCtrl',function SandCtrl($http,$scope,$location,mainService){
+	.controller('SandCtrl',function SandCtrl($http,$scope,$location,$timeout,mainService){
 
 		// Left-Side
 		$scope.products = [];
@@ -520,19 +592,21 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    	});
 	        $scope.getSand().then(function(a){
 	        	// Simulate category and subcat$scope.config.get().category[i]
+	        	var colors =mainService.config.get().colors;
 	        		
         		for (var i = 0; i < a.length; i++) {
         			var RandCat = Math.floor(Math.random() * ((cat.length-1) - 0 + 1)) + 0;
         			var RandSub = Math.floor(Math.random() * ((cat[RandCat].ch.length-1) - 0 + 1)) + 0;
+        			var RandColor =  Math.floor(Math.random() * ((colors.length-1) - 0 + 1)) + 0;
         			a[i].cat = cat[RandCat].id;
         			a[i].sub = cat[RandCat].ch[RandSub].id;
         			a[i].price = Math.floor(Math.random() * (600 - 50 + 1)) + 50;
         			a[i].store = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
         			a[i].brand = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
+        			a[i].color = colors[RandColor];
         		};
 
         		//console.log(JSON.stringify(a));
-
 	        	$scope.products = a;
 	        });
 	        $scope.getBox().then(function(a){
@@ -541,6 +615,10 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	        	}
 	        });
 	    });
+
+		$scope.getIndex = function(obj){
+		    return $scope.products.indexOf(obj);
+		}
 
 		$scope.byPrice = function (fieldName) {
 			var minValue = $scope.config.range.from;
@@ -573,6 +651,17 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				
 			};
 		};
+		$scope.byColor = function (fieldName) {
+			var configColor = $scope.config.color;
+			return function predicateFunc(item) {
+				if( configColor != ST_INACTIVE){
+		    		return configColor.toLowerCase() == item[fieldName].toLowerCase();
+				}else{
+					return true;
+				}
+				
+			};
+		};
 		$scope.getSand = function(){
 
 			var url, item, first;
@@ -588,7 +677,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 					  "text": "women clothes",
 					  "content_type": "1",
 					  "extras":'url_m',
-					  "per_page":"300",
+					  "per_page":"450",
 					  "color_codes":"c"
 					}
 					url = "https://api.flickr.com/services/rest/";
@@ -719,25 +808,35 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    	// console.log("Del:"+item);
 	    	// console.log($scope.box.indexOf(item));
 	    	
-	    	for (var i = 0; i < $scope.box.length; i++) {
-	    		if(i>index){
-	    			if( $scope.box[i].zindex != 0)
-	    				$scope.box[i].zindex = parseInt($scope.box[i].zindex) - 1;
-	    		}
-	    	};
-	    	$scope.box.splice(index, 1);
+	    	// for (var i = 0; i < $scope.box.length; i++) {
+	    	// 	if(i>index){
+	    	// 		if( $scope.box[i].zindex != 0)
+	    	// 			$scope.box[i].zindex = parseInt($scope.box[i].zindex) - 1;
+	    	// 	}
+	    	// };
+	    	// $scope.box.splice(index, 1);
+	    	$scope.box[index].removed = ST_ACTIVE;
 	    	$scope.boxItemModelActive = false;
 	    }
 	    $scope.cropInit = function(){
 	    	$scope.$broadcast('cropInit', $scope.boxItemModelActive );
 	    }
-	    $scope.$on('cropDone', function(event, src) { 
-			$scope.box[$scope.boxItemActive].url_m = src;
-			$scope.$apply();
+	    $scope.$on('cropDone', function(event, data) { 
+			$timeout(function(){
+				//$scope.box[$scope.boxItemActive].size = data.size;
+				//$scope.box[$scope.boxItemActive].position = data.position;
+				$scope.box[$scope.boxItemActive].url_m = data.url_m;
+
+				console.log(data);
+				console.log($scope.box[$scope.boxItemActive]);
+				alert("hey dude");
+			},5000)
+			//$scope.$apply();
 		});
 	    $scope.saveOutfie = function(){
 
 	    	if($scope.box.length >= 1){
+	    		// For filter info
 				// for (var i = 0; i < $scope.box.length; i++) {
 				// 	console.log( $scope.box[i] );
 				// };
@@ -857,8 +956,33 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			        ctx.fillStyle = pattern;
 			        ctx.fill();
 
+			        // Get Image with borders
 			        var dataurl = canvas.toDataURL("image/png");
-			        var files = dataurl;
+
+			        // Set the new image to canvas
+			        var img = new Image;
+					img.onload = function(){
+					  ctx.drawImage(img,0,0); // Or at whatever offset you like
+					};
+					img.src = dataurl;
+
+					// Get the images without borders and save it to send later;
+					var imageCropped = cropImageFromCanvas( ctx , canvas);
+
+					var files = imageCropped.image;
+					
+					var newSize = {
+							width : imageCropped.newWidth,
+							height: imageCropped.newHeight
+					}
+					var newPosition = {
+							top : $scope.image.position.top + imageCropped.addTop,
+							left: $scope.image.position.left + imageCropped.addLeft
+					}
+
+					
+
+					// Attach it to data
 			        var data = new FormData();
 			        data = 'image=' + files;
 
@@ -874,16 +998,70 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			        	if(rsp.result){
 			        		$scope.setCropStatus( ST_INACTIVE );
 			        		$(".crop").removeClass("active");
-			        		$scope.setCroppedImage( ROOT_PATH + rsp.image );
+
+			        		var data = {
+			        			url_m : ROOT_PATH + rsp.image,
+			        			size : newSize,
+			        			position : newPosition
+			        		}
+
+			        		$scope.$parent.box[$scope.$parent.boxItemActive].size = newSize;
+							$scope.$parent.box[$scope.$parent.boxItemActive].position = newPosition;
+							$scope.$parent.box[$scope.$parent.boxItemActive].url_m = ROOT_PATH + rsp.image;
+							console.log($scope.$parent.box[$scope.$parent.boxItemActive]);
+
+			        		$scope.setCroppedImage( data );
 			        	}
 		        	});
 			    }
 			}, 20);
 		}
+		function cropImageFromCanvas(ctx, canvas) {
 
-		$scope.setCroppedImage = function( src ){
+			var w = canvas.width,
+			h = canvas.height,
+			pix = {x:[], y:[]},
+			imageData = ctx.getImageData(0,0,canvas.width,canvas.height),
+			x, y, index;
+
+			for (y = 0; y < h; y++) {
+			    for (x = 0; x < w; x++) {
+			        index = (y * w + x) * 4;
+			        if (imageData.data[index+3] > 0) {
+
+			            pix.x.push(x);
+			            pix.y.push(y);
+
+			        }   
+			    }
+			}
+			pix.x.sort(function(a,b){return a-b});
+			pix.y.sort(function(a,b){return a-b});
+			var n = pix.x.length-1;
+
+			w = pix.x[n] - pix.x[0];
+			h = pix.y[n] - pix.y[0];
+			var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
+
+			canvas.width = w;
+			canvas.height = h;
+			ctx.putImageData(cut, 0, 0);
+
+			var image = canvas.toDataURL();
+			var result = {
+				image : image,
+				newWidth : w,
+				newHeight : h,
+				addTop : pix.y[0],
+				addLeft: pix.x[0],
+			}
+			return result;
+
+		}
+
+		$scope.setCroppedImage = function( data ){
 			// After render
-			$scope.$emit('cropDone', src );
+			$scope.$emit('cropDone', data );
 		}
 
 		$scope.setCropStatus = function( status ){

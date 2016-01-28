@@ -292,10 +292,8 @@ var jqyoui = angular.module('ngDragDrop', []).service('ngDragDropService', ['$ti
         //    }
         // });
         // TODO : Apply pagination filter
-        // For our purpose
-        var pagination = settings.applyFilter.split('-');
-        var actualIndex = (parseInt(pagination[0]) - 1 )*parseInt(pagination[1]) + settings.index;
-        return actualIndex;
+        // For our purpose we are giving original index
+        return settings.applyFilter;
       }
 
       return settings.index;
