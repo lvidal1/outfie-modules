@@ -193,8 +193,8 @@
 							</div>
 						</div>
 						
-						<div class="outfie-app" ng-app="app">
-							<div class="app-filter" ng-controller="FilterCtrl" pluginsfor="filter">
+						<div class="outfie-app" ng-app="appOutfie">
+							<div class="app-filter" ng-controller="FilterController" pluginsfor="filter">
 								<div class="clothing-category">
 									<data-owl-carousel class="owl-carousel clothing-carousel" id="clothing-carousel" data-options="1">
 								      	<div class="item" owl-carousel-item="" ng-repeat="item in categories">
@@ -241,11 +241,8 @@
 										</div>
 									</div>
 								</div>
-								<!-- <p>{{range.from}} | {{range.to}}</p> -->
 							</div>
-							<div class="app-sandbox" ng-controller="SandCtrl">
-								<!-- <p>{{config.category.id}} | {{config.subcategory.id}}</p>
-								<p>{{config.range.from}} | {{config.range.to}}</p> -->
+							<div class="app-sandbox" ng-controller="SandController">
 								<div class="sand-section">
 									<div class="products-page">
 										<div class="sand-image" dir-paginate="item in filtered = (products  | filter: {cat : config.category.id}:true |  filter: {sub : config.subcategory.id}:true | filter:byPrice('price') | filter:byStore('store') | filter:byBrand('brand') | filter:byColor('color')) | itemsPerPage: pageSize" current-page="currentPage"
@@ -283,15 +280,15 @@
 												<button class="btn btn-xs" ng-click="deleteLayer()">Borrar</button>
 											</div>
 											<div class="box-ground">
-												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true, onOver: 'dropCallback'}" >
-													<div class="draggable" ng-repeat="item in box track by $index" resizable this-item="item" on-resize="resize($evt, $ui)" on-drag="drag($evt, $ui)" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" >
+												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true }" >
+													<div class="draggable" ng-repeat="item in box track by $index" resizable this-item="item" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" >
 														<img src="{{item.url_m}}" >
 													</div>
 												</div>
 											</div>
 										</div>
 										
-										<div class="crop" ng-controller="CropCtrl" ng-class="isActive( status )">
+										<div class="crop" ng-controller="CropController" ng-class="isActive( status )">
 											<div class="crop-header">
 												<button class="btn btn-xs" ng-click="createNewImage()">Listo</button>
 												<button class="btn btn-xs" ng-click="setCropStatus(0)">Cancelar</button>
@@ -306,8 +303,6 @@
 										</div>
 									</div>
 								</div>
-
-								<div ng-show="w">{{w}}:{{h}}px</div>
 							</div>
 						</div>
 					</div>

@@ -30,7 +30,10 @@ var $config = {
 		done : ST_INACTIVE
 	}
 
-angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPagination','ngDragDrop'])
+angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPagination','ngDragDrop'])
+	.config(['$compileProvider', function ($compileProvider) {
+	  $compileProvider.debugInfoEnabled(false);
+	}])
 	.factory("mainService", function($http,$location,$window){
 		var categories = [];
 		var subcategories = [];
@@ -182,7 +185,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	            		break;
 	            	}
 
-	                // init carousel
 	               	var $owl = $( "#"+id );
 					$owl.trigger('destroy.owl.carousel');
 					$owl.find('.owl-stage-outer').remove().removeClass('owl-loaded');
@@ -206,21 +208,41 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	.directive('resizable', function () {
 	    return {
 	        restrict: 'A',
-	        scope:{
-	        	thisItem: "=thisItem",
-	        },
+	        controller: function($scope, $element){
+ 				
+ 				//TODO : Image should appear where is dropped
+ 				var i = $scope.$parent.box.indexOf( $scope.item );
+ 				
+ 				// After image is loaded
+ 				$element.find("img").load(function() {
+ 					// Set dimension,position and z-index to default if it's a new element
+ 					if( typeof $scope.item.position === 'undefined' ){
+	 					var containment = $("#sand-ground");
+
+	 				    var width = $($element).find("img")[0].width;
+	 					var height = $($element).find("img")[0].height;
+
+	 					var cWidth = containment.width();
+	 					var cHeight = containment.height();
+
+	 					var left = ( cWidth - width )/ 2;
+	 					var top = ( cHeight - height )/ 2;
+
+	 					var cantSiblings = $scope.$parent.box.length;
+	 					var zindex = $scope.item.zindex;
+
+	 					$scope.item.size = {width:width,height:height};
+	 					$scope.item.position = {top:top,left:left};
+	 					$scope.item.zindex = cantSiblings;
+
+	 					$element.css({"top":top,"left":left,"z-index":zindex});
+	 				}
+ 				});
+ 				
+        	},
 	        link: function (scope, elem, attrs) {
 
-	        	scope.$on(
-                    "ping",
-                    function handlePingEvent( event, pingCount ) {
-                       	scope.reposition();
-                    }
-                );
-
-
-	        	var index = scope.$parent.box.indexOf(scope.thisItem);
-
+	        	// Make picture dragable and resizable
 	        	elem.draggable({
 			        cursor      : "move",
 			        delay       : 100,
@@ -234,106 +256,67 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 
 			    // Reposition elements after render
 				scope.reposition = function(){
-
+					
 					// Set position
-					if( typeof scope.thisItem.position === 'undefined' ){
-						//TODO : Image should appear where is dropped
-						elem.find("img").load(function() {
-							var containment = $("#sand-ground");
-
-						    var width = $(elem).find("img")[0].width;
-							var height = $(elem).find("img")[0].height;
-
-							var cWidth = containment.width();
-							var cHeight = containment.height();
-
-							var left = ( cWidth - width )/ 2;
-							var top = ( cHeight - height )/ 2;
-
-							scope.thisItem.size = {width:width,height:height};
-							scope.thisItem.position = {left:left,top:top};
-
-							elem.css({left:left,top:top});
-						});
-						console.log("NO HAY POSICION");
-					}else{
-						
-						var pos = scope.thisItem.position;
+					if( typeof scope.item.position !== 'undefined' ){
+						var pos = scope.item.position;
 						var left = pos.left;
 						var top = pos.top;
 						elem.css({left:left,top:top});
-						console.log("POSITION ! : WHAT DAFAQ" , pos);
 					}
 					// Set dimension
-					if( typeof scope.thisItem.size !== 'undefined' ){
-						
-						var size = scope.thisItem.size;
+					if( typeof scope.item.size !== 'undefined' ){
+						var size = scope.item.size;
 						var width = size.width;
 						var height = size.height;
 						elem.css({width:width,height:height});
-						console.log("SIZE ! : WHAT DAFAQ" , size);
-						
-						
 					}
+
 					// Set z-index position
-					if( typeof scope.thisItem.zindex !== 'undefined' ){
-						var zindex = scope.thisItem.zindex;
-						elem.css("z-index",zindex);
-					}else{
-						var cantSiblings = scope.$parent.box.length;
-						scope.thisItem.zindex = cantSiblings;
-						var zindex = scope.thisItem.zindex;
+					if( typeof scope.item.zindex !== 'undefined' ){
+						var zindex = scope.item.zindex;
 						elem.css("z-index",zindex);
 					}
 				}
 				// Call reposition
 				scope.reposition();
 
-				// Watch if element is moved to front
-				scope.$watch("thisItem.zindex", function(n,o,e) {
+				// Update data(position,size) image on resizing / dragging
+	            elem.on('resize', function (evt, ui) {
+	              	setTimeout(function(){
+						// Update position and size when resizing
+	              		scope.item.size = ui.size;
+	              		scope.item.position = ui.position;
+	                	scope.$apply();                
+	              	},0)
+	            });
+	            elem.on('drag', function (evt, ui) {
+	              	setTimeout(function(){
+	              		// Update position when dragging
+	             		scope.item.position = ui.position;
+	                	scope.$apply();               
+	              	},0)
+	            });
+	            // TODO : Event mousedown activate cloned item in list due to track by $index
+	            elem.on('mousedown', function (evt, ui) {
+	              	$(".draggable").removeClass("active");
+	              	$(elem).addClass("active");
+	            });
+	            // Detect when a image have been cropped
+	            scope.$on("imageCropped",function handlePingEvent( event, pingCount ) {
+                       	setTimeout(function(){
+                       		scope.reposition();
+                       	},0);
+                    }
+                );
+                // Watch if element is moved to front
+				scope.$watch("item.zindex", function(n,o,e) {
 					setTimeout(function(){
 						elem.css("z-index",n);
 						scope.reposition();
 					},0)
 					return n;
 			    });
-			  //   scope.$watch("thisItem.position", function(n,o,e) {
-					// setTimeout(function(){
-					// 	console.log("VALOR ANTERIOR",o);
-					// 	console.log("VALOR NUEVO",n);
-					// 	scope.reposition();
-					// 	console.log("READ POSITION --> ",scope.thisItem.position)
-					// },0)
-					// return n;
-			  //   });
-
-	            elem.on('resize', function (evt, ui) {
-	              	setTimeout(function(){
-						// Update position and size when resizing
-	              		scope.thisItem.size = ui.size;
-	              		//scope.thisItem.position = ui.position;
-	              		// Remove : Call helper	
-	                	// if (scope.callresize) { 
-	                 //  		scope.callresize({$evt: evt, $ui: ui }); 
-	                	// }                
-	              	},0)
-	            });
-	            elem.on('drag', function (evt, ui) {
-	              	setTimeout(function(){
-	              		// Update position when dragging
-	             		scope.thisItem.position = ui.position;
-						// Remove : Call helper	
-	                	// if (scope.calldrag) { 
-	                 //  		scope.calldrag({$evt: evt, $ui: ui }); 
-	                	// }                
-	              	})
-	            });
-
-	            // TODO : Event mousedown activate cloned item in list due to track by $index
-	            elem.on('mousedown', function (evt, ui) {
-	              	$(".draggable").removeClass("active");
-	              	$(elem).addClass("active");
-	            });
 	        }
 	    };
 	  })
@@ -484,7 +467,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	       }
 	    }
 	})        
-	.controller('FilterCtrl',function FilterCtrl($scope,$location,$timeout,mainService){
+	.controller('FilterController',function FilterController($scope,$location,$timeout,mainService){
 
 		// Containers - Scope
 		$scope.categories = [];
@@ -574,7 +557,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		}
 		
 	})
-	.controller('SandCtrl',function SandCtrl($http,$scope,$location,$timeout,mainService){
+	.controller('SandController',function SandController($http,$scope,$location,$timeout,mainService){
 
 		// Left-Side
 		$scope.products = [];
@@ -631,7 +614,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		$scope.getIndex = function(obj){
 		    return $scope.products.indexOf(obj);
 		}
-
 		$scope.byPrice = function (fieldName) {
 			var minValue = $scope.config.range.from;
 			var maxValue = $scope.config.range.to;
@@ -648,7 +630,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				}else{
 					return true;
 				}
-				
 			};
 		};
 		$scope.byBrand = function (fieldName) {
@@ -660,7 +641,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				}else{
 					return true;
 				}
-				
 			};
 		};
 		$scope.byColor = function (fieldName) {
@@ -671,7 +651,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				}else{
 					return true;
 				}
-				
 			};
 		};
 		$scope.getSand = function(){
@@ -731,8 +710,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			$scope.box[index].status = ST_ACTIVE;
 			$scope.boxItemActive = index;
 			$scope.boxItemModelActive = $scope.box[index];
-
-			mainService.boxItemModelActive = $scope.boxItemModelActive;
 	    }
 	    $scope.isActive = function( boxItemStatus ){
 	    	if( boxItemStatus == ST_ACTIVE ){
@@ -808,7 +785,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    	$scope.box[item].zindex = tmpZindex;
 	    }
 	    $scope.deleteLayer = function(){
-	    	// TODO : set inactive to deleted elements
 	    	if($scope.boxItemModelActive === false){
 	    		return false;
 	    	}
@@ -833,20 +809,7 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	    $scope.cropInit = function(){
 	    	$scope.$broadcast('cropInit', $scope.boxItemModelActive );
 	    }
-	    $scope.$on('cropDone', function(event, data) { 
-			$timeout(function(){
-				//$scope.box[$scope.boxItemActive].size = data.size;
-				//$scope.box[$scope.boxItemActive].position = data.position;
-				$scope.box[$scope.boxItemActive].url_m = data.url_m;
-
-				console.log(data);
-				console.log($scope.box[$scope.boxItemActive]);
-				//alert("hey dude");
-			},0)
-			//$scope.$apply();
-		});
 	    $scope.saveOutfie = function(){
-
 	    	if($scope.box.length >= 1){
 	    		// For filter info
 				// for (var i = 0; i < $scope.box.length; i++) {
@@ -858,35 +821,14 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			    	data: $scope.box,
 			    	headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
 			    });
-
 				// to remove
 			    alert("Done");
 			}else{
 				alert("Debe escoger como minimo una imagen");
 			}
 	    }
-
-	    // Helpers on event
-	    $scope.dragCallback = function (event, ui) {
-	        var obj = ui.draggable;
-		    // console.log("Drag: ",obj);
-	    };
-		$scope.dropCallback = function (evt, ui) {
-			// TODO : drop on the position of mouse
-		   	var $ui = ui.offset;
-		   	var $obj = ui.position;
-		};
-		$scope.drag = function(evt,ui) {
-	      	//console.log (evt,ui);
-	      	// console.log(ui);
-	    }
-		$scope.resize = function(evt,ui) {
-	      	//console.log (evt,ui);
-	      	$scope.w = ui.size.width;
-	      	$scope.h = ui.size.height;
-	    }
 	})
-	.controller('CropCtrl',function CropCtrl($http,$scope,$location,mainService){
+	.controller('CropController',function CropController($http,$scope,$location,mainService){
 
 		var condition = 1;
 		var idCanvas = 'myCanvas';
@@ -917,7 +859,6 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				$scope.setCropStatus( ST_INACTIVE );
 				return false;
 			}
-
 			condition = 0;
 			$('.spot').each(function() {
 			    $(this).remove();
@@ -928,163 +869,117 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 			ctx.width = $scope.image.size.width;
 			ctx.height = $scope.image.size.height;
 			ctx.globalCompositeOperation = 'destination-over';
+			
 			//draw the polygon
-			setTimeout(function() {
+		    var offset = jqCanvas.offset();
+		    for (var i = 0; i < $scope.points.length; i += 2) {
+		        var x = parseInt(jQuery.trim($scope.points[i]));
+		        var y = parseInt(jQuery.trim($scope.points[i + 1]));
 
-			    var offset = jqCanvas.offset();
+		        if (i == 0) {
+		            ctx.moveTo(x - offset.left, y - offset.top);
+		        } else {
+		            ctx.lineTo(x - offset.left, y - offset.top);
+		        }
+		    }
+		    // TODO: Check what "this.isOldIE" is for
+		    if (this.isOldIE) {
 
-			    for (var i = 0; i < $scope.points.length; i += 2) {
-			        var x = parseInt(jQuery.trim($scope.points[i]));
-			        var y = parseInt(jQuery.trim($scope.points[i + 1]));
+		        ctx.fillStyle = '';
+		        ctx.fill();
+		        var fill = $('fill', myCanvas).get(0);
+		        fill.color = '';
+		        fill.src = element.src;
+		        fill.type = 'tile';
+		        fill.alignShape = false;
+		    }else {
+		    	// Create a tempCanvas to use it as pattern
+		    	var tempCanvas = document.createElement("canvas"),
+		    	    tCtx = tempCanvas.getContext("2d");
 
-			        if (i == 0) {
-			            ctx.moveTo(x - offset.left, y - offset.top);
-			        } else {
-			            ctx.lineTo(x - offset.left, y - offset.top);
-			        }
-			    }
+		    	tempCanvas.width = $scope.image.size.width;
+		    	tempCanvas.height = $scope.image.size.height;
+		    	tCtx.drawImage(imageObj,0,0,imageObj.width,imageObj.height,0,0,tempCanvas.width,tempCanvas.height);
 
-			    // TODO: Check what "this.isOldIE" is for
-			    if (this.isOldIE) {
+		    	// Draw pattern
+		        var pattern = ctx.createPattern(tempCanvas, "repeat");
+		        ctx.fillStyle = pattern;
+		        ctx.fill();
 
-			        ctx.fillStyle = '';
-			        ctx.fill();
-			        var fill = $('fill', myCanvas).get(0);
-			        fill.color = '';
-			        fill.src = element.src;
-			        fill.type = 'tile';
-			        fill.alignShape = false;
-			    }else {
-			    	// Create a tempCanvas to use it as pattern
-			    	var tempCanvas = document.createElement("canvas"),
-			    	    tCtx = tempCanvas.getContext("2d");
+		        // Get Image with borders
+		        var dataurl = canvas.toDataURL("image/png");
 
-			    	tempCanvas.width = $scope.image.size.width;
-			    	tempCanvas.height = $scope.image.size.height;
-			    	tCtx.drawImage(imageObj,0,0,imageObj.width,imageObj.height,0,0,tempCanvas.width,tempCanvas.height);
+		        // Set the new image to canvas
+		        var img = new Image;
+				img.onload = function(){
+				  ctx.drawImage(img,0,0); // Or at whatever offset you like
+				};
+				img.src = dataurl;
 
-			    	// Draw pattern
-			        var pattern = ctx.createPattern(tempCanvas, "repeat");
-			        ctx.fillStyle = pattern;
-			        ctx.fill();
+				// Get the images without borders and save it to send later;
+				var imageCropped = cropImageFromCanvas( ctx , canvas);
 
-			        // Get Image with borders
-			        var dataurl = canvas.toDataURL("image/png");
+				var files = imageCropped.image;
+				
+				var newSize = {
+						width : imageCropped.newWidth,
+						height: imageCropped.newHeight
+				}
+				var newPosition = {
+						top : $scope.image.position.top + imageCropped.addTop,
+						left: $scope.image.position.left + imageCropped.addLeft
+				}
 
-			        // Set the new image to canvas
-			        var img = new Image;
-					img.onload = function(){
-					  ctx.drawImage(img,0,0); // Or at whatever offset you like
-					};
-					img.src = dataurl;
+				// Attach it to data
+		        var data = new FormData();
+		        data = 'image=' + files;
 
-					// Get the images without borders and save it to send later;
-					var imageCropped = cropImageFromCanvas( ctx , canvas);
+        		
 
-					var files = imageCropped.image;
-					
-					var newSize = {
-							width : imageCropped.newWidth,
-							height: imageCropped.newHeight
-					}
-					var newPosition = {
-							top : $scope.image.position.top + imageCropped.addTop,
-							left: $scope.image.position.left + imageCropped.addLeft
-					}
+		        // Save cropped image to server and return its url to use in item in box
+		        $http({
+		            url: ROOT_PATH + ROOT_PROCESSCROP ,
+		            dataType: "json",
+		            method: "POST",
+		            headers: {
+		                "Content-Type": "application/x-www-form-urlencoded"
+		            },
+		            data: data
+		        }).success(function(rsp){
+                	if(rsp.result){
 
-					// Attach it to data
-			        var data = new FormData();
-			        data = 'image=' + files;
+                		$scope.setCropStatus( ST_INACTIVE );
+                		$(".crop").removeClass("active");
 
-			         // Save cropped image to server and return its url to use in item in box
-			        $http({
-			            url: ROOT_PATH + ROOT_PROCESSCROP ,
-			            dataType: "json",
-			            method: "POST",
-			            headers: {
-			                "Content-Type": "application/x-www-form-urlencoded"
-			            },
-			            data: data
-			        }).success(function(rsp){
-                    	if(rsp.result){
+                		var data = {
+                			url_m : ROOT_PATH + rsp.image,
+                			size : newSize,
+                			position : newPosition
+                		}
 
-                    		$scope.setCropStatus( ST_INACTIVE );
-                    		$(".crop").removeClass("active");
+                		setTimeout(function(){
+                			$scope.$parent.box[$scope.$parent.boxItemActive].position = newPosition;
+                			$scope.$parent.box[$scope.$parent.boxItemActive].size = newSize;
+                			$scope.$parent.box[$scope.$parent.boxItemActive].url_m = ROOT_PATH + rsp.image;
 
-                    		var data = {
-                    			url_m : ROOT_PATH + rsp.image,
-                    			size : newSize,
-                    			position : newPosition
-                    		}
-
-                    		$scope.$parent.box[$scope.$parent.boxItemActive].size = newSize;
-            				$scope.$parent.box[$scope.$parent.boxItemActive].position = newPosition;
-            				$scope.$parent.box[$scope.$parent.boxItemActive].url_m = ROOT_PATH + rsp.image;
-            				console.log("----> ESTO DEBERIA SER ",newPosition);
-            				console.log("----> POR LA PTMR ",$scope.$parent.box[$scope.$parent.boxItemActive].position);
-            				//$scope.$parent.$apply();
-                    		//$scope.setCroppedImage( data );
-                    		$scope.$parent.$broadcast( "ping", "hola" );
-                    	}
-			        }).error(function(error){
-			            $scope.error = error;
-			        });
-
-			       
-
-			    }
-			}, 20);
+                			$scope.$apply();
+			        		$scope.$parent.$broadcast( "imageCropped", "done" );
+                		})		
+                	}
+		        }).error(function(error){
+		           	alert( error.toString() );
+		        });
+		    }
 		}
-		function cropImageFromCanvas(ctx, canvas) {
-
-			var w = canvas.width,
-			h = canvas.height,
-			pix = {x:[], y:[]},
-			imageData = ctx.getImageData(0,0,canvas.width,canvas.height),
-			x, y, index;
-
-			for (y = 0; y < h; y++) {
-			    for (x = 0; x < w; x++) {
-			        index = (y * w + x) * 4;
-			        if (imageData.data[index+3] > 0) {
-
-			            pix.x.push(x);
-			            pix.y.push(y);
-
-			        }   
-			    }
-			}
-			pix.x.sort(function(a,b){return a-b});
-			pix.y.sort(function(a,b){return a-b});
-			var n = pix.x.length-1;
-
-			w = pix.x[n] - pix.x[0];
-			h = pix.y[n] - pix.y[0];
-			var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
-
-			canvas.width = w;
-			canvas.height = h;
-			ctx.putImageData(cut, 0, 0);
-
-			var image = canvas.toDataURL();
-			var result = {
-				image : image,
-				newWidth : w,
-				newHeight : h,
-				addTop : pix.y[0],
-				addLeft: pix.x[0],
-			}
-			return result;
-
-		}
-
-		$scope.setCroppedImage = function( data ){
-			// After render
-			$scope.$emit('cropDone', data );
-		}
-
+		
 		$scope.setCropStatus = function( status ){
 			$scope.status = status;
+			if( status == ST_INACTIVE ){
+				$('.spot').each(function() {
+				    $(this).remove();
+				});
+				$scope.points = [];
+			}
 		}
 		$scope.isActive = function( cropStatus ){
 			if( cropStatus == ST_ACTIVE ){
@@ -1176,8 +1071,49 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 		            }
 		            posx = e.offsetX;
 		            posy = e.offsetY;
-		        }//condition
+		        }
 		    });
+		}
+		function cropImageFromCanvas(ctx, canvas) {
+
+			var w = canvas.width,
+			h = canvas.height,
+			pix = {x:[], y:[]},
+			imageData = ctx.getImageData(0,0,canvas.width,canvas.height),
+			x, y, index;
+
+			for (y = 0; y < h; y++) {
+			    for (x = 0; x < w; x++) {
+			        index = (y * w + x) * 4;
+			        if (imageData.data[index+3] > 0) {
+
+			            pix.x.push(x);
+			            pix.y.push(y);
+
+			        }   
+			    }
+			}
+			pix.x.sort(function(a,b){return a-b});
+			pix.y.sort(function(a,b){return a-b});
+			var n = pix.x.length-1;
+
+			w = pix.x[n] - pix.x[0];
+			h = pix.y[n] - pix.y[0];
+			var cut = ctx.getImageData(pix.x[0], pix.y[0], w, h);
+
+			canvas.width = w;
+			canvas.height = h;
+			ctx.putImageData(cut, 0, 0);
+
+			var image = canvas.toDataURL();
+			var result = {
+				image : image,
+				newWidth : w,
+				newHeight : h,
+				addTop : pix.y[0],
+				addLeft: pix.x[0],
+			}
+			return result;
 		}
 	});
 
