@@ -7,25 +7,46 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="create-dilema__carousel image-carousel">
-				<div id="imagen-carousel" class="owl-carousel">
-					<div ng-repeat="item in galeria" ng-if="$index % 2 == 0" class="item">
-					    <a href="" title="" class="{{galeria[$index].active}}" ng-click="setImagen(galeria[$index])">
-							<div class="inner">
-								<img src="{{galeria[$index].src}}" alt="">
-							</div>
-						</a>
-						<a href="" title="" class="{{galeria[$index+1].active}}" ng-click="setImagen(galeria[$index+1])">
-							<div class="inner">
-								<img src="{{galeria[$index+1].src}}" alt="">
-							</div>
-						</a>
-					</div>
+		<div class="bs-docs-example">
+		    <ul id="imagenTab" class="nav nav-tabs">
+		      <li class="active"><a data-href="#here" data-toggle="tab">Desde aqui</a></li>
+		      <li><a data-href="#upload" data-toggle="tab">Sube una imagen</a></li>
+		      <li><a data-href="#instagram" data-toggle="tab">Instagram</a></li>
+		    </ul>
+		    <div id="myTabContent" class="tab-content">
+		      <div class="tab-pane fade in active" id="here">
+		        <div class="row">
+		        	<div class="col-md-10 col-md-offset-1">
+		        		<div class="create-dilema__carousel image-carousel">
+		        			<div id="imagen-carousel" class="owl-carousel">
+		        				<div ng-repeat="item in galeria" ng-if="$index % 2 == 0" class="item">
+		        				    <a href="" title="" class="{{galeria[$index].active}}" ng-click="setImagen(galeria[$index])">
+		        						<div class="inner">
+		        							<img src="{{galeria[$index].src}}" alt="">
+		        						</div>
+		        					</a>
+		        					<a href="" title="" class="{{galeria[$index+1].active}}" ng-click="setImagen(galeria[$index+1])">
+		        						<div class="inner">
+		        							<img src="{{galeria[$index+1].src}}" alt="">
+		        						</div>
+		        					</a>
+		        				</div>
 
-				</div>
-			</div>
+		        			</div>
+		        		</div>
+		        	</div>
+		        </div>
+		      </div>
+		      <div class="tab-pane fade" id="upload">
+		        <p>Content for Upload</p>
+		      </div>
+		      <div class="tab-pane fade" id="instagram">
+		        <p>Content for Instagram</p>
+		      </div>
+		    </div>
 		</div>
+
+		
 	</div>
 	
 </div>

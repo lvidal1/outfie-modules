@@ -159,7 +159,7 @@
           </div>
 
           <div class="wrap container">
-            <div ng-view class="views slide"></div>
+            <div ng-view class="views slideup"></div>
           </div>
         </div>
         
@@ -183,9 +183,9 @@
   <!-- Bootstrap Select-->
   <script type="text/javascript" src="assets/select/js/bootstrap-select.min.js"></script>
   <!-- Wizard -->
-  <script src="assets/wizard/angular/angular.min.js"></script>
-  <script src="assets/wizard/angular/angular.route.js"></script>
-  <script src="assets/wizard/angular/angular-animate.js"></script>
+  <script src="assets/angular/angular.min.js"></script>
+  <script src="assets/angular/angular.route.js"></script>
+  <script src="assets/angular/angular-animate.js"></script>
   <script src="assets/wizard/wizard.js"></script>
   <script>
     (function($) {
@@ -208,6 +208,15 @@
         });
 
       }
+
+      $(document).on("click",'#imagenTab a',function (e) {
+        $("#imagenTab").find("li").removeClass('active')
+        $( ".tab-pane" ).removeClass('in').removeClass('active');
+        $(this).parent('li').addClass('active')
+        $($(this).attr('data-href')).addClass('in').addClass('active');
+
+          e.preventDefault();
+      });
 
       /*  [ Owl Carousel ]
       - - - - - - - - - - - - - - - - - - - - */
@@ -241,14 +250,14 @@
 
       /*  [ Masonry Catalog ]
       	- - - - - - - - - - - - - - - - - - - - */
-      var $container = $('.masonry-container');
+      // var $container = $('.masonry-container');
 
-      $container.imagesLoaded(function() {
-        $container.masonry({
-          columnWidth: '.item',
-          itemSelector: '.item'
-        });
-      });
+      // $container.imagesLoaded(function() {
+      //   $container.masonry({
+      //     columnWidth: '.item',
+      //     itemSelector: '.item'
+      //   });
+      // });
 
 
     })(jQuery);

@@ -19,7 +19,7 @@ $time : 1s;
 
 	.wrap{
 		position:relative;
-		min-height:370px;
+		min-height:425px;
 		overflow:hidden;
 		padding: 0;
 	}
@@ -92,6 +92,10 @@ $time : 1s;
 		    width: 100%;
 		    height: 100%;
 		    @include transition( $time , $animation );
+		    .container{
+		    	max-height:400px;
+		    	overflow:hidden;
+		    }
 		}
 	   	&.ng-enter {
 		    top: 100%;
@@ -101,9 +105,11 @@ $time : 1s;
 		}
 		&.ng-leave {
 		    top: 0;
+
 		}
 		&.ng-leave-active {
 		    top: -100%;
+
 		}
 	}
 	.fade{
@@ -137,5 +143,13 @@ $time : 1s;
 	}
 	.create-dilema__for-when .btn.active {
 	    background: #03D4AD;
+	}
+}
+
+.nav.nav-tabs{
+	li{
+		a{
+			cursor:pointer;
+		}
 	}
 }

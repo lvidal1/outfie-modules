@@ -17,7 +17,7 @@ var $config = {
 				currentPage : 1,
 				pageSize: 20
 			},
-			status: ST_ACTIVE
+			status: ST_INACTIVE
 		},
 		range:{
 			min: 0,
@@ -583,7 +583,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 		$scope.currentPage = mainService.config.get().sandbox.pagination.currentPage;
   		$scope.pageSize = mainService.config.get().sandbox.pagination.pageSize;
 
-
+  		var simulationTime = 1000;
   		// Connection with filter bar
 	    $scope.$watch("mainService.config.subcategory", function(o,n,e) {
 	    	mainService.data.get().then(function(a){
@@ -598,6 +598,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	    	});
 	        $scope.getSand().then(function(a){
 
+	        	setTimeout(function(){
 	        	if( mainService.config.get().xhrProducts == ST_ACTIVE ){
 		        	// Filter images from flirck : Just for simulation
 		        	var colors = mainService.config.get().colors;
@@ -634,13 +635,21 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	        		// Set images from json
 	        		$scope.products = a;
 	        	}
+	        	mainService.config.get().sandbox.status = ST_ACTIVE;
 	        	$scope.messageSand = $scope.config.text.noitems;
+
+	        	$scope.$apply();
+	        	},simulationTime);
 	        });
 	        $scope.getBox().then(function(a){
+	        	setTimeout(function(){
 	        	if(a.length > 0){
 	        		$scope.box = a;
 	        	}
+
 	        	$scope.messageBox = $scope.config.text.dragGreet;
+	        	$scope.$apply();
+	        	},simulationTime);
 	        });
 	    });
 

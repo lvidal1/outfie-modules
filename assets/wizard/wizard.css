@@ -1,2 +1,112 @@
-#wizard .wrap{position:relative;min-height:370px;overflow:hidden;padding:0}#wizard .create-dilema__bar{margin-top:0;-moz-transition:1s ease !important;-ms-transition:1s ease !important;-o-transition:1s ease !important;transition:1s ease !important;min-height:85px;position:relative}#wizard .create-dilema__bar.ng-hide{margin-top:-85px}#wizard .btn-option{position:relative;-moz-transition:1s ease !important;-ms-transition:1s ease !important;-o-transition:1s ease !important;transition:1s ease !important;top:0}#wizard .btn-option.ng-hide{top:-90px}#wizard .slide.ng-enter,#wizard .slide.ng-leave{position:absolute;left:0;top:0;width:100%;height:100%;-moz-transition:1s ease !important;-ms-transition:1s ease !important;-o-transition:1s ease !important;transition:1s ease !important}#wizard .slide.ng-enter{left:100%}#wizard .slide.ng-enter-active{left:0}#wizard .slide.ng-leave{left:0}#wizard .slide.ng-leave-active{left:-100%}#wizard .slidedown.ng-enter,#wizard .slidedown.ng-leave{position:absolute;left:0;top:0;width:100%;height:100%;-moz-transition:1s ease !important;-ms-transition:1s ease !important;-o-transition:1s ease !important;transition:1s ease !important}#wizard .slidedown.ng-enter{top:-100%}#wizard .slidedown.ng-enter-active{top:0}#wizard .slidedown.ng-leave{top:0}#wizard .slidedown.ng-leave-active{top:100%}#wizard .slideup.ng-enter,#wizard .slideup.ng-leave{position:absolute;left:0;top:0;width:100%;height:100%;-moz-transition:1s ease !important;-ms-transition:1s ease !important;-o-transition:1s ease !important;transition:1s ease !important}#wizard .slideup.ng-enter{top:100%}#wizard .slideup.ng-enter-active{top:0}#wizard .slideup.ng-leave{top:0}#wizard .slideup.ng-leave-active{top:-100%}#wizard .fade{opacity:1}#wizard .fade.ng-enter,#wizard .fade.ng-leave{position:absolute;left:0;top:0;width:100%;height:100%;-moz-transition:1s ease !important;-ms-transition:1s ease !important;-o-transition:1s ease !important;transition:1s ease !important}#wizard .fade.ng-enter{opacity:0}#wizard .fade.ng-enter-active{opacity:1}#wizard .fade.ng-leave{opacity:1}#wizard .fade.ng-leave-active{opacity:0}#wizard .create-dilema__carousel .item a.active,#wizard .create-dilema__carousel .item a.active .inner{border-color:#03D4AD}#wizard .create-dilema__for-when .btn.active{background:#03D4AD}
+#wizard {
+  /*Elemets active*/ }
+  #wizard .wrap {
+    position: relative;
+    min-height: 425px;
+    overflow: hidden;
+    padding: 0; }
+  #wizard .create-dilema__bar {
+    margin-top: 0;
+    -moz-transition: 1s ease !important;
+    -ms-transition: 1s ease !important;
+    -o-transition: 1s ease !important;
+    transition: 1s ease !important;
+    min-height: 85px;
+    position: relative; }
+    #wizard .create-dilema__bar.ng-hide {
+      margin-top: -85px; }
+  #wizard .btn-option {
+    position: relative;
+    -moz-transition: 1s ease !important;
+    -ms-transition: 1s ease !important;
+    -o-transition: 1s ease !important;
+    transition: 1s ease !important;
+    top: 0; }
+    #wizard .btn-option.ng-hide {
+      top: -90px; }
+  #wizard .slide.ng-enter, #wizard .slide.ng-leave {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    -moz-transition: 1s ease !important;
+    -ms-transition: 1s ease !important;
+    -o-transition: 1s ease !important;
+    transition: 1s ease !important; }
+  #wizard .slide.ng-enter {
+    left: 100%; }
+  #wizard .slide.ng-enter-active {
+    left: 0; }
+  #wizard .slide.ng-leave {
+    left: 0; }
+  #wizard .slide.ng-leave-active {
+    left: -100%; }
+  #wizard .slidedown.ng-enter, #wizard .slidedown.ng-leave {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    -moz-transition: 1s ease !important;
+    -ms-transition: 1s ease !important;
+    -o-transition: 1s ease !important;
+    transition: 1s ease !important; }
+  #wizard .slidedown.ng-enter {
+    top: -100%; }
+  #wizard .slidedown.ng-enter-active {
+    top: 0; }
+  #wizard .slidedown.ng-leave {
+    top: 0; }
+  #wizard .slidedown.ng-leave-active {
+    top: 100%; }
+  #wizard .slideup.ng-enter, #wizard .slideup.ng-leave {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    -moz-transition: 1s ease !important;
+    -ms-transition: 1s ease !important;
+    -o-transition: 1s ease !important;
+    transition: 1s ease !important; }
+    #wizard .slideup.ng-enter .container, #wizard .slideup.ng-leave .container {
+      max-height: 400px;
+      overflow: hidden; }
+  #wizard .slideup.ng-enter {
+    top: 100%; }
+  #wizard .slideup.ng-enter-active {
+    top: 0; }
+  #wizard .slideup.ng-leave {
+    top: 0; }
+  #wizard .slideup.ng-leave-active {
+    top: -100%; }
+  #wizard .fade {
+    opacity: 1; }
+    #wizard .fade.ng-enter, #wizard .fade.ng-leave {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      -moz-transition: 1s ease !important;
+      -ms-transition: 1s ease !important;
+      -o-transition: 1s ease !important;
+      transition: 1s ease !important; }
+    #wizard .fade.ng-enter {
+      opacity: 0; }
+    #wizard .fade.ng-enter-active {
+      opacity: 1; }
+    #wizard .fade.ng-leave {
+      opacity: 1; }
+    #wizard .fade.ng-leave-active {
+      opacity: 0; }
+  #wizard .create-dilema__carousel .item a.active, #wizard .create-dilema__carousel .item a.active .inner {
+    border-color: #03D4AD; }
+  #wizard .create-dilema__for-when .btn.active {
+    background: #03D4AD; }
+
+.nav.nav-tabs li a {
+  cursor: pointer; }
+
 /*# sourceMappingURL=wizard.css.map */

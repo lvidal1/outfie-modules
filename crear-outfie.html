@@ -258,7 +258,16 @@
 							                	<img src="{{item.url}}">
 							                </div>
 							            </div>
-							            <div class="text-center" ng-show="!filtered.length">{{messageSand}}</div>
+							            
+							            <div class="text-center sand-message" ng-show="!filtered.length">
+							            	<span class="message">{{messageSand}}</span>
+							            	<span class="icon" ng-hide="config.sandbox.status">
+							            		<div class="loader"></div>
+							            	</span>
+							            	<span class="icon" ng-show="config.sandbox.status">
+							            		<img src="assets/outfie/noitem-icon.png">
+							            	</span>
+							            </div>
 							            <div class="clearfix"></div>
 									</div>
 						            <div class="products-pagination">
