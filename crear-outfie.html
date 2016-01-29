@@ -284,7 +284,7 @@
 											</div>
 											<div class="box-ground">
 												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true, onOver: 'dropCallback'}" >
-													<div class="draggable" ng-repeat="item in box track by $index" resizable item="item" on-resize="resize($evt, $ui)" on-drag="drag($evt, $ui)" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" >
+													<div class="draggable" ng-repeat="item in box track by $index" resizable this-item="item" on-resize="resize($evt, $ui)" on-drag="drag($evt, $ui)" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" >
 														<img src="{{item.url_m}}" >
 													</div>
 												</div>

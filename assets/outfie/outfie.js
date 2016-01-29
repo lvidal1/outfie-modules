@@ -206,15 +206,20 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 	.directive('resizable', function () {
 	    return {
 	        restrict: 'A',
-	        scope: {
-	            callresize: '&onResize',
-	            calldrag : '&onDrag',
-	            zindex:      '=',
-	            item: '=' 
+	        scope:{
+	        	thisItem: "=thisItem",
 	        },
-	        link: function postLink(scope, elem, attrs) {
+	        link: function (scope, elem, attrs) {
 
-	        	var index = scope.$parent.$parent.box.indexOf(scope.item);
+	        	scope.$on(
+                    "ping",
+                    function handlePingEvent( event, pingCount ) {
+                       	scope.reposition();
+                    }
+                );
+
+
+	        	var index = scope.$parent.box.indexOf(scope.thisItem);
 
 	        	elem.draggable({
 			        cursor      : "move",
@@ -229,8 +234,9 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 
 			    // Reposition elements after render
 				scope.reposition = function(){
+
 					// Set position
-					if( typeof scope.$parent.$parent.box[index].position === 'undefined' ){
+					if( typeof scope.thisItem.position === 'undefined' ){
 						//TODO : Image should appear where is dropped
 						elem.find("img").load(function() {
 							var containment = $("#sand-ground");
@@ -244,34 +250,39 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 							var left = ( cWidth - width )/ 2;
 							var top = ( cHeight - height )/ 2;
 
-							scope.$parent.$parent.box[index].size = {width:width,height:height};
-							scope.$parent.$parent.box[index].position = {left:left,top:top};
+							scope.thisItem.size = {width:width,height:height};
+							scope.thisItem.position = {left:left,top:top};
 
 							elem.css({left:left,top:top});
 						});
 						console.log("NO HAY POSICION");
 					}else{
-						var pos = scope.$parent.$parent.box[index].position;
+						
+						var pos = scope.thisItem.position;
 						var left = pos.left;
 						var top = pos.top;
 						elem.css({left:left,top:top});
-						console.log("WHAT DAFAQ" , pos);
+						console.log("POSITION ! : WHAT DAFAQ" , pos);
 					}
 					// Set dimension
-					if( typeof scope.item.size !== 'undefined' ){
-						var size = scope.$parent.$parent.box[index].size;
+					if( typeof scope.thisItem.size !== 'undefined' ){
+						
+						var size = scope.thisItem.size;
 						var width = size.width;
 						var height = size.height;
 						elem.css({width:width,height:height});
+						console.log("SIZE ! : WHAT DAFAQ" , size);
+						
+						
 					}
 					// Set z-index position
-					if( typeof scope.item.zindex !== 'undefined' ){
-						var zindex = scope.item.zindex;
+					if( typeof scope.thisItem.zindex !== 'undefined' ){
+						var zindex = scope.thisItem.zindex;
 						elem.css("z-index",zindex);
 					}else{
-						var cantSiblings = scope.$parent.$parent.box.length;
-						scope.$parent.$parent.box[index].zindex = cantSiblings;
-						var zindex = scope.$parent.$parent.box[index].zindex;
+						var cantSiblings = scope.$parent.box.length;
+						scope.thisItem.zindex = cantSiblings;
+						var zindex = scope.thisItem.zindex;
 						elem.css("z-index",zindex);
 					}
 				}
@@ -279,41 +290,42 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 				scope.reposition();
 
 				// Watch if element is moved to front
-				scope.$parent.$watch("item.zindex", function(n,o,e) {
+				scope.$watch("thisItem.zindex", function(n,o,e) {
 					setTimeout(function(){
 						elem.css("z-index",n);
 						scope.reposition();
 					},0)
 					return n;
 			    });
-			    scope.$parent.$watch("item.position", function(n,o,e) {
-					setTimeout(function(){
-						console.log("VALOR ANTERIOR",n);
-						console.log("VALOR NUEVO",o);
-						scope.reposition();
-					},0)
-					return n;
-			    });
+			  //   scope.$watch("thisItem.position", function(n,o,e) {
+					// setTimeout(function(){
+					// 	console.log("VALOR ANTERIOR",o);
+					// 	console.log("VALOR NUEVO",n);
+					// 	scope.reposition();
+					// 	console.log("READ POSITION --> ",scope.thisItem.position)
+					// },0)
+					// return n;
+			  //   });
 
 	            elem.on('resize', function (evt, ui) {
 	              	setTimeout(function(){
 						// Update position and size when resizing
-	              		scope.$parent.$parent.box[index].size = ui.size;
-	              		scope.$parent.$parent.box[index].position = ui.position;
+	              		scope.thisItem.size = ui.size;
+	              		//scope.thisItem.position = ui.position;
 	              		// Remove : Call helper	
-	                	if (scope.callresize) { 
-	                  		scope.callresize({$evt: evt, $ui: ui }); 
-	                	}                
+	                	// if (scope.callresize) { 
+	                 //  		scope.callresize({$evt: evt, $ui: ui }); 
+	                	// }                
 	              	},0)
 	            });
 	            elem.on('drag', function (evt, ui) {
 	              	setTimeout(function(){
 	              		// Update position when dragging
-	             		scope.$parent.$parent.box[index].position = ui.position;
+	             		scope.thisItem.position = ui.position;
 						// Remove : Call helper	
-	                	if (scope.calldrag) { 
-	                  		scope.calldrag({$evt: evt, $ui: ui }); 
-	                	}                
+	                	// if (scope.calldrag) { 
+	                 //  		scope.calldrag({$evt: evt, $ui: ui }); 
+	                	// }                
 	              	})
 	            });
 
@@ -829,8 +841,8 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 
 				console.log(data);
 				console.log($scope.box[$scope.boxItemActive]);
-				alert("hey dude");
-			},5000)
+				//alert("hey dude");
+			},0)
 			//$scope.$apply();
 		});
 	    $scope.saveOutfie = function(){
@@ -980,39 +992,46 @@ angular.module('app',['ngRoute','ngAnimate','angularUtils.directives.dirPaginati
 							left: $scope.image.position.left + imageCropped.addLeft
 					}
 
-					
-
 					// Attach it to data
 			        var data = new FormData();
 			        data = 'image=' + files;
 
-			        // Save cropped image to server and return its url to use in item in box
-			        var xhr = $.ajax({
-			          	url: ROOT_PATH + ROOT_PROCESSCROP ,
-			          	type: "POST",
-			          	dataType: "json", // expected format for response
-			          	contentType: "application/x-www-form-urlencoded", // send as JSON
-			          	data: data
+			         // Save cropped image to server and return its url to use in item in box
+			        $http({
+			            url: ROOT_PATH + ROOT_PROCESSCROP ,
+			            dataType: "json",
+			            method: "POST",
+			            headers: {
+			                "Content-Type": "application/x-www-form-urlencoded"
+			            },
+			            data: data
+			        }).success(function(rsp){
+                    	if(rsp.result){
+
+                    		$scope.setCropStatus( ST_INACTIVE );
+                    		$(".crop").removeClass("active");
+
+                    		var data = {
+                    			url_m : ROOT_PATH + rsp.image,
+                    			size : newSize,
+                    			position : newPosition
+                    		}
+
+                    		$scope.$parent.box[$scope.$parent.boxItemActive].size = newSize;
+            				$scope.$parent.box[$scope.$parent.boxItemActive].position = newPosition;
+            				$scope.$parent.box[$scope.$parent.boxItemActive].url_m = ROOT_PATH + rsp.image;
+            				console.log("----> ESTO DEBERIA SER ",newPosition);
+            				console.log("----> POR LA PTMR ",$scope.$parent.box[$scope.$parent.boxItemActive].position);
+            				//$scope.$parent.$apply();
+                    		//$scope.setCroppedImage( data );
+                    		$scope.$parent.$broadcast( "ping", "hola" );
+                    	}
+			        }).error(function(error){
+			            $scope.error = error;
 			        });
-			        xhr.success(function(rsp , status, jqXHR){
-			        	if(rsp.result){
-			        		$scope.setCropStatus( ST_INACTIVE );
-			        		$(".crop").removeClass("active");
 
-			        		var data = {
-			        			url_m : ROOT_PATH + rsp.image,
-			        			size : newSize,
-			        			position : newPosition
-			        		}
+			       
 
-			        		$scope.$parent.box[$scope.$parent.boxItemActive].size = newSize;
-							$scope.$parent.box[$scope.$parent.boxItemActive].position = newPosition;
-							$scope.$parent.box[$scope.$parent.boxItemActive].url_m = ROOT_PATH + rsp.image;
-							console.log($scope.$parent.box[$scope.$parent.boxItemActive]);
-
-			        		$scope.setCroppedImage( data );
-			        	}
-		        	});
 			    }
 			}, 20);
 		}
