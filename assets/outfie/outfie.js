@@ -16,7 +16,8 @@ var $config = {
 			pagination:{
 				currentPage : 1,
 				pageSize: 20
-			}
+			},
+			status: ST_ACTIVE
 		},
 		range:{
 			min: 0,
@@ -27,10 +28,16 @@ var $config = {
 		search:[],
 		colors:[],
 		color:ST_INACTIVE,
-		done : ST_INACTIVE
+		done : ST_INACTIVE,
+		text:{
+			loadingProducts: "Cargando productos",
+			loadingTool: "Cargando herramienta",
+			noitems: "No hay productos con tu selección",
+			dragGreet: "Arrastra una imagen para crear tu outfie"
+		}
 	}
 
-angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPagination','ngDragDrop'])
+angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.directives.dirPagination','ngDragDrop'])
 	.config(['$compileProvider', function ($compileProvider) {
 	  $compileProvider.debugInfoEnabled(false);
 	}])
@@ -211,7 +218,6 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 	        controller: function($scope, $element){
  				
  				//TODO : Image should appear where is dropped
- 				var i = $scope.$parent.box.indexOf( $scope.item );
  				
  				// After image is loaded
  				$element.find("img").load(function() {
@@ -319,7 +325,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 			    });
 	        }
 	    };
-	  })
+	})
 	.directive('ionrangeslider',['$timeout','mainService', function ($timeout,mainService) {
 	    return {
 	        restrict: 'A',
@@ -509,6 +515,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 					$scope.search.push( brands );
 				}
 				$scope.search = mainService.search.set( $scope.search );
+				mainService.config.set( "search" , $scope.search );
 
 			}
 			if(d.colors != undefined){
@@ -568,10 +575,14 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 		$scope.boxItemModelActive = false;
 
 		$scope.config = mainService.config.get();
+
+		$scope.messageSand = $scope.config.text.loadingProducts;
+		$scope.messageBox = $scope.config.text.loadingTool;
 		var cat = []
 		
 		$scope.currentPage = mainService.config.get().sandbox.pagination.currentPage;
   		$scope.pageSize = mainService.config.get().sandbox.pagination.pageSize;
+
 
   		// Connection with filter bar
 	    $scope.$watch("mainService.config.subcategory", function(o,n,e) {
@@ -586,33 +597,120 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 	    		};
 	    	});
 	        $scope.getSand().then(function(a){
-	        	// Simulate category and subcat$scope.config.get().category[i]
-	        	var colors =mainService.config.get().colors;
-	        		
-        		for (var i = 0; i < a.length; i++) {
-        			var RandCat = Math.floor(Math.random() * ((cat.length-1) - 0 + 1)) + 0;
-        			var RandSub = Math.floor(Math.random() * ((cat[RandCat].ch.length-1) - 0 + 1)) + 0;
-        			var RandColor =  Math.floor(Math.random() * ((colors.length-1) - 0 + 1)) + 0;
-        			a[i].cat = cat[RandCat].id;
-        			a[i].sub = cat[RandCat].ch[RandSub].id;
-        			a[i].price = Math.floor(Math.random() * (600 - 50 + 1)) + 50;
-        			a[i].store = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
-        			a[i].brand = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
-        			a[i].color = colors[RandColor];
-        		};
 
-        		//console.log(JSON.stringify(a));
-	        	$scope.products = a;
+	        	if( mainService.config.get().xhrProducts == ST_ACTIVE ){
+		        	// Filter images from flirck : Just for simulation
+		        	var colors = mainService.config.get().colors;
+
+		        	var products = [];
+	        		for (var i = 0; i < a.length; i++) {
+	        			var RandCat = Math.floor(Math.random() * ((cat.length-1) - 0 + 1)) + 0;
+	        			var RandSub = Math.floor(Math.random() * ((cat[RandCat].ch.length-1) - 0 + 1)) + 0;
+	        			var RandColor =  Math.floor(Math.random() * ((colors.length-1) - 0 + 1)) + 0;
+	        			a[i].cat = cat[RandCat].id;
+	        			a[i].sub = cat[RandCat].ch[RandSub].id;
+	        			a[i].price = Math.floor(Math.random() * (600 - 50 + 1)) + 50;
+	        			a[i].store = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
+	        			a[i].brand = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
+	        			a[i].color = colors[RandColor];
+
+	        			var p = {
+	        				brand: a[i].brand,
+							cat: a[i].cat,
+							color: a[i].color,
+							price: a[i].price,
+							status: true,
+							store: a[i].store,
+							sub: a[i].sub,
+							title: a[i].title,
+							url: a[i].url_m
+	        			}
+
+	        			products.push(p);
+	        		};
+	        		//console.log(JSON.stringify(products));
+		        	$scope.products = products;
+	        	}else{
+	        		// Set images from json
+	        		$scope.products = a;
+	        	}
+	        	$scope.messageSand = $scope.config.text.noitems;
 	        });
 	        $scope.getBox().then(function(a){
 	        	if(a.length > 0){
 	        		$scope.box = a;
 	        	}
+	        	$scope.messageBox = $scope.config.text.dragGreet;
 	        });
 	    });
 
 		$scope.getIndex = function(obj){
 		    return $scope.products.indexOf(obj);
+		}
+		$scope.getCategoria = function( id ){
+			var cats = mainService.categories.get();
+			var name = false;
+			for (var i = 0; i < cats.length; i++) {
+				if(cats[i].id == id){
+					name = cats[i].text;
+					break;
+				}
+			};
+			return name || null;
+		}
+		$scope.getSubCategoria = function( id ){
+			var cats = mainService.subcategories.get();
+			var name = false;
+			for (var i = 0; i < cats.length; i++) {
+				if(cats[i].id == id){
+					name = cats[i].text;
+					break;
+				}
+			};
+			return name || null;
+		}
+		$scope.getTienda = function( id ){
+			if(  mainService.search.get()[0] != undefined){
+				var cats = mainService.search.get()[0].children;
+				
+				var name = false;
+				for (var i = 0; i < cats.length; i++) {
+					var split = cats[i].id.split("-");
+					if(split[1] == id){
+						name = cats[i].text;
+						break;
+					}
+				};
+				return name || null;
+			}else{
+				return null;
+			}
+		}
+		$scope.getMarca = function( id ){
+			if(  mainService.search.get()[1] != undefined){
+				var cats = mainService.search.get()[1].children;
+				var name = false;
+				for (var i = 0; i < cats.length; i++) {
+					var split = cats[i].id.split("-");
+					if(split[1] == id){
+						name = cats[i].text;
+						break;
+					}
+				};
+				return name || null;
+			}else{
+				return null;
+			}
+		}
+		$scope.ignoredImages = function(){
+			var box = $scope.box;
+			var count = 0;
+			for (var i = 0; i < box.length; i++) {
+				if(box[i].removed != undefined && box[i].removed == ST_ACTIVE ){
+					count++;
+				}
+			};
+			return ( count == box.length );
 		}
 		$scope.byPrice = function (fieldName) {
 			var minValue = $scope.config.range.from;
@@ -744,7 +842,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 	    		}
 	    	};
 	    	if (nextItem == null) {
-	    		console.log("What: "+nextItem);
+	    		//console.log("What: "+nextItem);
 	    		return false;
 	    	};
 	    	var tmpZindex = $scope.box[nextItem].zindex;
@@ -777,7 +875,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 	    		}
 	    	};
 	    	if (nextItem == null) {
-	    		console.log("What: "+nextItem);
+	    		//console.log("What: "+nextItem);
 	    		return false;
 	    	};
 	    	var tmpZindex = $scope.box[nextItem].zindex;
@@ -785,7 +883,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 	    	$scope.box[item].zindex = tmpZindex;
 	    }
 	    $scope.deleteLayer = function(){
-	    	if($scope.boxItemModelActive === false){
+	    	if($scope.boxItemModelActive === ST_INACTIVE){
 	    		return false;
 	    	}
 	    	var item = $scope.boxItemModelActive;
@@ -804,21 +902,26 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 	    	// };
 	    	// $scope.box.splice(index, 1);
 	    	$scope.box[index].removed = ST_ACTIVE;
-	    	$scope.boxItemModelActive = false;
+	    	$scope.boxItemModelActive = ST_INACTIVE;
 	    }
 	    $scope.cropInit = function(){
-	    	$scope.$broadcast('cropInit', $scope.boxItemModelActive );
+	    	if( $scope.boxItemModelActive != ST_INACTIVE ){
+	    		$scope.$broadcast('cropInit', $scope.boxItemModelActive );
+	    	}
 	    }
 	    $scope.saveOutfie = function(){
-	    	if($scope.box.length >= 1){
-	    		// For filter info
-				// for (var i = 0; i < $scope.box.length; i++) {
-				// 	console.log( $scope.box[i] );
-				// };
+	    	if($scope.box.length >= 1 ){
+	    		// Splice all removed elemented
+	    		var box = $scope.box;
+				for (var i = 0; i < box.length; i++) {
+					if(box[i].removed != undefined && box[i].removed == ST_ACTIVE ){
+						box.splice(i, 1);
+					}
+				};
 				$http({
 			    	method: 'POST',
 			    	url: ROOT_PATH + ROOT_SETDATA,           
-			    	data: $scope.box,
+			    	data: box,
 			    	headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
 			    });
 				// to remove
@@ -951,16 +1054,10 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
                 		$scope.setCropStatus( ST_INACTIVE );
                 		$(".crop").removeClass("active");
 
-                		var data = {
-                			url_m : ROOT_PATH + rsp.image,
-                			size : newSize,
-                			position : newPosition
-                		}
-
                 		setTimeout(function(){
                 			$scope.$parent.box[$scope.$parent.boxItemActive].position = newPosition;
                 			$scope.$parent.box[$scope.$parent.boxItemActive].size = newSize;
-                			$scope.$parent.box[$scope.$parent.boxItemActive].url_m = ROOT_PATH + rsp.image;
+                			$scope.$parent.box[$scope.$parent.boxItemActive].url = ROOT_PATH + rsp.image;
 
                 			$scope.$apply();
 			        		$scope.$parent.$broadcast( "imageCropped", "done" );
@@ -990,7 +1087,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','angularUtils.directives.dirPa
 		}
 		function crop(condition,points,canvas,jqCanvas,item){
 
-			var imageSrc  = $scope.image.url_m;
+			var imageSrc  = $scope.image.url;
 
 		    this.isOldIE = (window.G_vmlCanvasManager);
 		    if (this.isOldIE) {
