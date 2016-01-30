@@ -217,7 +217,7 @@
 												</div>
 											</div>
 											<div class="clothing-filters__price-range section">
-												<h4>Rango de precios $50 - $650</h4>
+												<h4>Rango de precios ${{range.min}} - ${{range.max}}</h4>
 												<input id="price-range" class="hide irs-hidden-input" readonly ionrangeslider>
 											</div>
 											<div class="clothing-filters__search section">
@@ -290,7 +290,7 @@
 												<button class="btn btn-xs" ng-click="deleteLayer()">Borrar</button>
 											</div>
 											<div class="box-ground">
-												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true }" >
+												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true ,onOver :'stop',containment :'position'}" >
 													<div class="draggable" ng-repeat="item in box track by $index" resizable this-item="item" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" >
 														<img src="{{item.url}}" >
 													</div>

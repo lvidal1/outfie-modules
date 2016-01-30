@@ -5,7 +5,6 @@ var ROOT_USERDATA = "ws.user.json";
 var ROOT_GETDATA = "ws.data.json";
 var ROOT_GETPRODUCTS = "ws.products.json";
 var ROOT_SETDATA = "ws.data.php";
-var ROOT_PROCESSCROP = "ws.processCrop.php"
 var $config = {
 		category :    ST_INACTIVE,
 		subcategory : ST_INACTIVE,
@@ -310,9 +309,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	            });
 	            // Detect when a image have been cropped
 	            scope.$on("imageCropped",function handlePingEvent( event, pingCount ) {
-                       	setTimeout(function(){
-                       		scope.reposition();
-                       	},0);
+                       	scope.reposition();
                     }
                 );
                 // Watch if element is moved to front
@@ -583,7 +580,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 		$scope.currentPage = mainService.config.get().sandbox.pagination.currentPage;
   		$scope.pageSize = mainService.config.get().sandbox.pagination.pageSize;
 
-  		var simulationTime = 1000;
+  		var simulationTime = 200;
   		// Connection with filter bar
 	    $scope.$watch("mainService.config.subcategory", function(o,n,e) {
 	    	mainService.data.get().then(function(a){
@@ -629,7 +626,6 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 
 	        			products.push(p);
 	        		};
-	        		//console.log(JSON.stringify(products));
 		        	$scope.products = products;
 	        	}else{
 	        		// Set images from json
@@ -652,6 +648,11 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	        	},simulationTime);
 	        });
 	    });
+
+		$scope.stop = function(a,e){
+			console.log(a);
+			console.log(e);
+		}
 
 		$scope.getIndex = function(obj){
 		    return $scope.products.indexOf(obj);
@@ -934,7 +935,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 			    	headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
 			    });
 				// to remove
-			    alert("Done");
+			    alert("Se ha guardado las imagenes en ws.data.json");
 			}else{
 				alert("Debe escoger como minimo una imagen");
 			}
@@ -996,7 +997,6 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 		    }
 		    // TODO: Check what "this.isOldIE" is for
 		    if (this.isOldIE) {
-
 		        ctx.fillStyle = '';
 		        ctx.fill();
 		        var fill = $('fill', myCanvas).get(0);
@@ -1028,7 +1028,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 				};
 				img.src = dataurl;
 
-				// Get the images without borders and save it to send later;
+				// Get the images without borders , its new dimension and its position;
 				var imageCropped = cropImageFromCanvas( ctx , canvas);
 
 				var files = imageCropped.image;
@@ -1042,39 +1042,15 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 						left: $scope.image.position.left + imageCropped.addLeft
 				}
 
-				// Attach it to data
-		        var data = new FormData();
-		        data = 'image=' + files;
+				// The newImage is set it in the layer in a base64 format
+				$scope.$parent.box[$scope.$parent.boxItemActive].position = newPosition;
+    			$scope.$parent.box[$scope.$parent.boxItemActive].size = newSize;
+    			$scope.$parent.box[$scope.$parent.boxItemActive].url = files;
 
-        		
-
-		        // Save cropped image to server and return its url to use in item in box
-		        $http({
-		            url: ROOT_PATH + ROOT_PROCESSCROP ,
-		            dataType: "json",
-		            method: "POST",
-		            headers: {
-		                "Content-Type": "application/x-www-form-urlencoded"
-		            },
-		            data: data
-		        }).success(function(rsp){
-                	if(rsp.result){
-
-                		$scope.setCropStatus( ST_INACTIVE );
-                		$(".crop").removeClass("active");
-
-                		setTimeout(function(){
-                			$scope.$parent.box[$scope.$parent.boxItemActive].position = newPosition;
-                			$scope.$parent.box[$scope.$parent.boxItemActive].size = newSize;
-                			$scope.$parent.box[$scope.$parent.boxItemActive].url = ROOT_PATH + rsp.image;
-
-                			$scope.$apply();
-			        		$scope.$parent.$broadcast( "imageCropped", "done" );
-                		})		
-                	}
-		        }).error(function(error){
-		           	alert( error.toString() );
-		        });
+    			$(".crop").removeClass("active");
+    			$scope.setCropStatus( ST_INACTIVE );
+				
+        		$scope.$parent.$broadcast( "imageCropped", "done" );
 		    }
 		}
 		
@@ -1192,10 +1168,8 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 			    for (x = 0; x < w; x++) {
 			        index = (y * w + x) * 4;
 			        if (imageData.data[index+3] > 0) {
-
 			            pix.x.push(x);
 			            pix.y.push(y);
-
 			        }   
 			    }
 			}
