@@ -235,25 +235,13 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	        restrict: 'A',
 	        controller: function($scope, $element){
  				
- 				//TODO : Image should appear where is dropped
- 				
  				// After image is loaded
  				$element.find("img").load(function() {
- 					// Set dimension,position and z-index to default if it's a new element
+ 					// Set dimension,position and z-index to calculated Position/Size if it's a new element
  					if( typeof $scope.item.position === 'undefined' ){
 
  						var calculatePosition = mainService.positionHelper.get();
  						var calculateSize = mainService.sizeHelper.get();
-
- 						console.log("NUEVO");
- 						console.log(calculatePosition);
- 						console.log(calculateSize);
-	 					//var containment = $("#sand-ground");
-
-	 				 //    var width = $($element).find("img")[0].width;
-	 					// var height = $($element).find("img")[0].height;
-
-	 					// var size = setRatioImage( width , height );
 
 	 					var top = calculatePosition.top;
 	 					var left = calculatePosition.left;
@@ -268,9 +256,6 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	 					$element.css({"top":top,"left":left,"z-index":zindex});
 	 				}
  				});
-
-				
- 				
         	},
 	        link: function (scope, elem, attrs) {
 
