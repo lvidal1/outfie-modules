@@ -47,6 +47,8 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 		var search = [];
 		var colors = [];
 		var config = $config;
+		var positionHelper = [];
+		var sizeHelper = [];
 
 	  	var xhrData = $http.get(ROOT_PATH + ROOT_GETDATA).then(function(d) { 
 			return d.data
@@ -121,8 +123,25 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 					colors = $colors;
 					return colors;
 				}
+	  		},
+	  		positionHelper:{
+	  			get: function(){
+	  				return positionHelper;
+	  			},
+	  			set : function( $positionHelper ){
+					positionHelper = $positionHelper;
+					return positionHelper;
+				}
+	  		},
+	  		sizeHelper:{
+	  			get: function(){
+	  				return sizeHelper;
+	  			},
+	  			set : function( $sizeHelper ){
+					sizeHelper = $sizeHelper;
+					return sizeHelper;
+				}
 	  		}
-			
 		}
 	})
 	.directive("owlCarousel", function() {
@@ -211,7 +230,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	        }
 	    };
 	}])
-	.directive('resizable', function () {
+	.directive('resizable', ['mainService', function (mainService) {
 	    return {
 	        restrict: 'A',
 	        controller: function($scope, $element){
@@ -222,27 +241,35 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
  				$element.find("img").load(function() {
  					// Set dimension,position and z-index to default if it's a new element
  					if( typeof $scope.item.position === 'undefined' ){
-	 					var containment = $("#sand-ground");
 
-	 				    var width = $($element).find("img")[0].width;
-	 					var height = $($element).find("img")[0].height;
+ 						var calculatePosition = mainService.positionHelper.get();
+ 						var calculateSize = mainService.sizeHelper.get();
 
-	 					var cWidth = containment.width();
-	 					var cHeight = containment.height();
+ 						console.log("NUEVO");
+ 						console.log(calculatePosition);
+ 						console.log(calculateSize);
+	 					//var containment = $("#sand-ground");
 
-	 					var left = ( cWidth - width )/ 2;
-	 					var top = ( cHeight - height )/ 2;
+	 				 //    var width = $($element).find("img")[0].width;
+	 					// var height = $($element).find("img")[0].height;
+
+	 					// var size = setRatioImage( width , height );
+
+	 					var top = calculatePosition.top;
+	 					var left = calculatePosition.left;
 
 	 					var cantSiblings = $scope.$parent.box.length;
 	 					var zindex = $scope.item.zindex;
 
-	 					$scope.item.size = {width:width,height:height};
-	 					$scope.item.position = {top:top,left:left};
+	 					$scope.item.size = calculateSize;
+	 					$scope.item.position = calculatePosition;
 	 					$scope.item.zindex = cantSiblings;
 
 	 					$element.css({"top":top,"left":left,"z-index":zindex});
 	 				}
  				});
+
+				
  				
         	},
 	        link: function (scope, elem, attrs) {
@@ -282,6 +309,12 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 						var zindex = scope.item.zindex;
 						elem.css("z-index",zindex);
 					}
+					// When the image is correctly positioned,sized,and z-indexed
+					// Turn it on
+					setTimeout(function(){
+						elem.css("visibility","visible");
+					},10);
+					
 				}
 				// Call reposition
 				scope.reposition();
@@ -322,7 +355,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 			    });
 	        }
 	    };
-	})
+	}])
 	.directive('ionrangeslider',['$timeout','mainService', function ($timeout,mainService) {
 	    return {
 	        restrict: 'A',
@@ -561,7 +594,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 		}
 		
 	})
-	.controller('SandController',function SandController($http,$scope,$location,$timeout,mainService){
+	.controller('SandController',function SandController($http,$scope,$location,$timeout,$q,mainService){
 
 		// Left-Side
 		$scope.products = [];
@@ -649,6 +682,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	        		// Set images from json
 	        		$scope.products = a;
 	        	}
+	        	$("#finish-page").css("visibility","visible");
 	        	mainService.config.get().sandbox.status = ST_ACTIVE;
 	        	$scope.messageSand = $scope.config.text.noitems;
 
@@ -667,9 +701,96 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	        });
 	    });
 
-		$scope.stop = function(a,e){
-			console.log(a);
-			console.log(e);
+		$scope.setDropImageInfo = function(a,e){
+
+			var image = $(e.draggable).find("img")[0];
+			var src = $(image).attr('src');
+			// Create a new image on js side for futher operations
+			var img = new Image();
+			// Whe img is loaded	
+			var result = img.onload = function() {
+
+				var sand = $("#sand-ground").offset();
+				var elem = e.offset;
+				var tempWidth = this.width;
+				var tempHeight = this.height;
+		  		
+		  		// Resize image to ratio defined
+				var size = setRatioImage( tempWidth , tempHeight );
+
+				// Get relative position from document and image-drop container
+		  		var pos = {
+		  			top : 0,
+		  			left : 0
+		  		}
+		  		if(  sand.top <= elem.top ){
+		  			pos.top =  elem.top - sand.top;
+		  		}else{
+		  			pos.top = 0;
+		  		}
+		  		if(  sand.left <= elem.left ){
+		  			pos.left =  elem.left - sand.left;
+		  		}else{
+		  			pos.left = 0;
+		  		}
+		  		pos.top =  Math.abs(elem.top - sand.top);
+		  		pos.left =  Math.abs(elem.left - sand.left);
+
+		  		// Verify overflow image, if exist, recalculate position
+		  		var moveElemX = pos.left + size.width;
+		  		var moveElemY = pos.top + size.height;
+		  		var fixedTop,fixedLeft;
+
+		  		if( moveElemX <= $("#sand-ground").width()){
+		  			fixedLeft = 0;
+		  		}else{
+		  			fixedLeft = Math.abs(moveElemX - $("#sand-ground").width());
+		  		}
+
+		  		if( moveElemY <= $("#sand-ground").height()){
+		  			fixedTop = 0;
+		  		}else{
+		  			fixedTop = Math.abs(moveElemY - $("#sand-ground").height());
+		  		}
+		  		var fixedPos = {top: (pos.top - fixedTop) ,left:(pos.left - fixedLeft)};
+
+		  		// Set drop info position/size
+		  		mainService.positionHelper.set( fixedPos );
+		  		mainService.sizeHelper.set( size );
+			}
+			img.src = src;
+			// Return promise to droppable
+			var deferred = $q.defer();
+		  	deferred.resolve();
+		  	return deferred.promise;
+		}
+
+		function setRatioImage( originalWidth , originalHeight){
+			var maxWidth = 200; // Max width for the image
+	        var maxHeight = 150;    // Max height for the image
+	        var ratio = 0;  // Used for aspect ratio
+	        var width = originalWidth;    // Current image width
+	        var height = originalHeight;  // Current image height
+
+	        // Check if the current width is larger than the max
+	        if(width > maxWidth){
+	            ratio = maxWidth / width;   // get ratio for scaling image
+	            $(this).css("width", maxWidth); // Set new width
+	            $(this).css("height", height * ratio);  // Scale height based on ratio
+	            height = height * ratio;    // Reset height to match scaled image
+	            width = width * ratio;    // Reset width to match scaled image
+	        }
+
+	        // Check if current height is larger than max
+	        if(height > maxHeight){
+	            ratio = maxHeight / height; // get ratio for scaling image
+	            $(this).css("height", maxHeight);   // Set new height
+	            $(this).css("width", width * ratio);    // Scale width based on ratio
+	            width = width * ratio;    // Reset width to match scaled image
+	            height = height * ratio;    // Reset height to match scaled image
+	        }
+
+	        return { width: width , height: height};
 		}
 
 		$scope.getIndex = function(obj){

@@ -275,7 +275,7 @@
 									        	</div>
 									        </div>
 								        </div>
-								        <div class="sand-layer" id="finish-page" ng-show="finishPage">
+								        <div class="sand-layer" id="finish-page" ng-show="finishPage" style="visibility:hidden;">
 								        	<div class="layer-bg">
 								        	</div>
 								        	<div class="layer-content">
@@ -328,8 +328,8 @@
 												<button class="btn btn-xs" ng-click="deleteLayer()">Borrar</button>
 											</div>
 											<div class="box-ground">
-												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true ,onOver :'stop',containment :'position'}" >
-													<div class="draggable" ng-repeat="item in box track by $index" resizable this-item="item" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" >
+												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true ,beforeDrop :'setDropImageInfo'}" >
+													<div class="draggable" ng-repeat="item in box track by $index" resizable this-item="item" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" style="visibility:hidden;" >
 														<img src="{{item.url}}" >
 													</div>
 												</div>
