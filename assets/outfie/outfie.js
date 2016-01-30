@@ -567,14 +567,32 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 		$scope.products = [];
 		// Right-Side
 		$scope.box = [];
+		$scope.finishPage = false;
+		$scope.styleSelected = false;
+		$scope.suggestion = "";
 
 		$scope.boxItemActive = false;
 		$scope.boxItemModelActive = false;
 
 		$scope.config = mainService.config.get();
-
 		$scope.messageSand = $scope.config.text.loadingProducts;
 		$scope.messageBox = $scope.config.text.loadingTool;
+
+		$scope.styles = [{
+				"id":1,
+				"class":"style-boho",
+				"text":"tomboy"
+			},
+			{
+				"id":2,
+				"class":"style-roker",
+				"text":"minimal"
+			},
+			{
+				"id":3,
+				"class":"style-sexy",
+				"text":"preppy"
+			}];
 		var cat = []
 		
 		$scope.currentPage = mainService.config.get().sandbox.pagination.currentPage;
@@ -919,8 +937,19 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	    		$scope.$broadcast('cropInit', $scope.boxItemModelActive );
 	    	}
 	    }
+
+	    $scope.finishCollection = function(){
+	    	$scope.finishPage = true;
+	    }
+	    $scope.setStyle = function(item,index){
+	    	for (var i = 0; i < $scope.styles.length; i++) {
+	    		$scope.styles[i].select = "";
+	    	};
+	    	item.select = "select";
+	    	$scope.styleSelected = item.id;
+	    }
 	    $scope.saveOutfie = function(){
-	    	if($scope.box.length >= 1 ){
+	    	if($scope.box.length >= 1 && $scope.styleSelected && $scope.suggestion){
 	    		// Splice all removed elemented
 	    		var box = $scope.box;
 				for (var i = 0; i < box.length; i++) {
@@ -928,16 +957,23 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 						box.splice(i, 1);
 					}
 				};
+				var data = {
+					images : box,
+					styleSelected : $scope.styleSelected,
+					suggestion : $scope.suggestion
+				}
 				$http({
 			    	method: 'POST',
 			    	url: ROOT_PATH + ROOT_SETDATA,           
-			    	data: box,
+			    	data: data,
 			    	headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
+			    }).then(function(rsp){
+			    	$(".data-result").html(JSON.stringify(data, undefined, 4)); // Indented 4 spaces
+			    	$("#result").modal("show");
 			    });
-				// to remove
-			    alert("Se ha guardado las imagenes en ws.data.json");
+				
 			}else{
-				alert("Debe escoger como minimo una imagen");
+				alert("Debe llenar todos los campos");
 			}
 	    }
 	})

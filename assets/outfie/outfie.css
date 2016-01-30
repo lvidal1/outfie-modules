@@ -6,7 +6,61 @@
   margin-bottom: 50px;
   border-bottom: 1px solid #000; }
   .app-sandbox .sand-section:nth-child(1) {
+    position: relative;
     border-right: 1px solid #000; }
+  .app-sandbox .sand-section .wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative; }
+    .app-sandbox .sand-section .wrapper .sand-layer {
+      position: absolute;
+      width: 100%;
+      height: 100%; }
+    .app-sandbox .sand-section .wrapper #product-page {
+      z-index: 0; }
+    .app-sandbox .sand-section .wrapper #finish-page {
+      z-index: 1;
+      color: white;
+      font-family: 'Yanone Kaffeesatz', sans-serif; }
+      .app-sandbox .sand-section .wrapper #finish-page .layer-bg {
+        position: absolute;
+        background-color: black;
+        opacity: 0.65;
+        width: 100%;
+        height: 100%;
+        z-index: -1; }
+      .app-sandbox .sand-section .wrapper #finish-page .layer-content {
+        padding: 10px;
+        font-size: 24px;
+        text-transform: uppercase; }
+        .app-sandbox .sand-section .wrapper #finish-page .layer-content .finish-greet .greet {
+          display: block;
+          color: #03D4AD; }
+        .app-sandbox .sand-section .wrapper #finish-page .layer-content .finish-question {
+          font-size: 28px; }
+        .app-sandbox .sand-section .wrapper #finish-page .layer-content .finish-styles {
+          margin-bottom: 10px; }
+          .app-sandbox .sand-section .wrapper #finish-page .layer-content .finish-styles .style-item {
+            display: inline-block; }
+          .app-sandbox .sand-section .wrapper #finish-page .layer-content .finish-styles a {
+            display: inline-block;
+            margin: 5px 5px 0px 5px;
+            border-radius: 50%;
+            transition: all 0.4s;
+            border: 2px solid #000;
+            background-color: white;
+            background-image: none;
+            width: 90px;
+            height: 90px; }
+            .app-sandbox .sand-section .wrapper #finish-page .layer-content .finish-styles a:hover, .app-sandbox .sand-section .wrapper #finish-page .layer-content .finish-styles a.select {
+              background-color: #03D4AD; }
+        .app-sandbox .sand-section .wrapper #finish-page .layer-content .finish-suggest textarea {
+          width: 100%;
+          color: black;
+          min-height: 120px; }
+        .app-sandbox .sand-section .wrapper #finish-page .layer-content .btn-black-lg {
+          background: #000;
+          color: #fff; }
   .app-sandbox .sand-section .products-page {
     min-height: 400px; }
     .app-sandbox .sand-section .products-page .sand-message {
@@ -93,6 +147,17 @@
       position: relative;
       width: 100%;
       height: 100%; }
+  .app-sandbox .sand-section .product-finish {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    padding: 10px 10px; }
+    .app-sandbox .sand-section .product-finish .wrapper {
+      width: 100%;
+      height: 100%;
+      background-color: #03D4AD;
+      opacity: 0.6; }
 .app-sandbox .sand-image {
   float: left;
   width: 20%;
