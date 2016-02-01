@@ -20,12 +20,12 @@
 		        		<div class="create-dilema__carousel image-carousel">
 		        			<div id="imagen-carousel" class="owl-carousel">
 		        				<div ng-repeat="item in galeria" ng-if="$index % 2 == 0" class="item">
-		        				    <a href="" title="" class="{{galeria[$index].active}}" ng-click="setImagen(galeria[$index])">
+		        				    <a href="" title="" class="{{galeria[$index].active}}" ng-click="setImagen(galeria[$index],'gallery')">
 		        						<div class="inner">
 		        							<img src="{{galeria[$index].src}}" alt="">
 		        						</div>
 		        					</a>
-		        					<a href="" title="" class="{{galeria[$index+1].active}}" ng-click="setImagen(galeria[$index+1])">
+		        					<a href="" title="" class="{{galeria[$index+1].active}}" ng-click="setImagen(galeria[$index+1],'gallery')">
 		        						<div class="inner">
 		        							<img src="{{galeria[$index+1].src}}" alt="">
 		        						</div>
@@ -38,7 +38,51 @@
 		        </div>
 		      </div>
 		      <div class="tab-pane fade" id="upload">
-		        <p>Content for Upload</p>
+		      	<div class="row">
+		      		<div class="col-md-1">
+		      		</div>
+		      		<div class="col-md-10">
+		      			<div class="row">
+		      				<div class="col-md-6 upload-section">
+		      					<div ngf-drop ngf-select ng-model="files" class="drop-box" 
+	      					        ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true"
+	      					        accept="image/*,application/pdf" 
+	      					        ngf-pattern="'image/*'">
+	      					        <div class="drop-text">
+	      					        	{{dropText}}
+	      					        </div>
+	      					        <div class="drop-image" ng-show="!uploaderStatus">
+	      					        	<img src="assets/wizard/drag-icon.png">
+	      					        </div>
+	      					    </div>
+	      					    <span class="progress" ng-show="progressStatus">
+						        	<div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
+						        </span>
+						        <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+		      				</div>
+		      				<div class="col-md-6 upload-section">
+		      					<div class="image-preview" ng-class="(filePreview)?'':'preview'">
+		      						<img src="{{ui.uploadCache || 'assets/wizard/preview-icon.png' }}" >
+		      					</div>
+		      					<div class="row" ng-hide="!filePreview">
+		      						<div class="col-md-12">
+		      							<div class="pull-left">
+				      						<span class="previewText">
+				      							Esta imagen se usará para tu dilema
+				      						</span>
+				      					</div>
+		      							<div class="pull-right">
+				      						<button class="btn btn-lg btn-continue" ng-click="setImageUploaded()" >Continuar</button>
+				      					</div>
+		      						</div>
+		      					</div>
+		      					
+		      				</div>
+		      			</div>
+		      		</div>
+		      		<div class="col-md-1">
+		      		</div>
+		      	</div>
 		      </div>
 		      <div class="tab-pane fade" id="instagram">
 		        <p>Content for Instagram</p>

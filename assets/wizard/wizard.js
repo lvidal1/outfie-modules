@@ -3,6 +3,7 @@ var ST_ACTIVE = true;
 var ST_INACTIVE = false;
 var ROOT_GETDATA = "ws.data.json";
 var ROOT_SETDATA = "ws.data.php";
+var ROOT_UPLOAD = "ws.upload.php";
 var $config = {
 		views : [
 			{id:"p1",file:"create-dilema-p1.html",data:{text:"",title:"Ocasión"},url:"/ocasion",controller:"OcasionCtrl","status":ST_ACTIVE,"seen":ST_INACTIVE , default: ST_ACTIVE},
@@ -17,7 +18,7 @@ var $config = {
 
 }
 
-angular.module('app',['ngRoute','ngAnimate'])
+angular.module('app',['ngRoute','ngAnimate','ngFileUpload'])
 	.config(function($routeProvider){
 		// Set routes / views / controllers
 		var views = $config.views;
@@ -80,7 +81,8 @@ angular.module('app',['ngRoute','ngAnimate'])
 			},
 			preferences : {},
 			ui:{
-				nav:ST_INACTIVE
+				nav:ST_INACTIVE,
+				uploadCache: ST_INACTIVE
 			}
 		}
 	})
@@ -307,35 +309,153 @@ angular.module('app',['ngRoute','ngAnimate'])
 			mainService.nextView();
 		}
 	})
-	.controller('ImagenCtrl',function ImagenCtrl($scope,mainService){
+	.controller('ImagenCtrl',function ImagenCtrl($scope,mainService,Upload,$timeout){
 		var view = "p6";
+		var text = {
+			initial : "Arrastra una imagen aquí o haz click para subir",
+			loading : "Estamos subiendo tu imagen, espera un momento"
+		}
+		
 		$scope.galeria = [];
+
+		$scope.dropText = text.initial;
+		$scope.uploaderStatus = ST_INACTIVE;
+		$scope.progressStatus = ST_INACTIVE;
+		$scope.filePreview = false;
+
 		$scope.preferences = mainService.preferences;
+		$scope.ui = mainService.ui;
 		mainService.getData().then(function(data){
 			$scope.galeria = data[view]["galeria"];
 
 			if(mainService.currentView().seen == ST_ACTIVE){
-				for (var i = 0; i < $scope.galeria.length; i++) {
-					
-					if( $scope.galeria[i].id == mainService.preferences[view].id ){
-						$scope.galeria[i].active="active";
-					}else{
-						$scope.galeria[i].active="";
-					}
-					
-				};
+
+				// If view have been seen, set data to chosen tab
+				switch( mainService.preferences[view].type ){
+					case 'gallery':
+						mainService.ui.uploadCache = ST_INACTIVE;
+						for (var i = 0; i < $scope.galeria.length; i++) {
+							
+							if( $scope.galeria[i].id == mainService.preferences[view].id ){
+								$scope.galeria[i].active="active";
+							}else{
+								$scope.galeria[i].active="";
+							}
+							
+						};
+					break;
+					case 'uploader':
+						
+						$scope.filePreview = mainService.preferences[view].src;
+						// Set Tab uploader as active
+						setTimeout(function(){
+							setTabActive($('a[data-href="#upload"]'));
+						},200);
+					break;
+					case 'instagram':
+						// Call method to set image gotten from Instagram
+					break;
+				}
+				
 			}
 		});
-		$scope.setImagen = function(item){
+		$scope.setImagen = function(item , type ){
+			// We need a reference to chosen image for futher views
+			switch( type ){
+				// As gallery get a image preloaded we need a reference to it
+				case 'gallery':
+					mainService.ui.uploadCache = item.src;
+				break;
+				// As uploader get a image from file chosen and then it is set as base64 after get the token
+				// from server, it's not needed to set it again
+				case 'uploader':
+				break;
+			}
+			item.type = type;
 			$scope.preferences[ view ] = item;
 			mainService.nextView();
 		}
+		// Uploader
+		$scope.$watch('files', function () {
+		    $scope.upload($scope.files);
+		});
+		$scope.$watch('uploaderStatus', function (n) {
+		    if( n  == ST_ACTIVE ){
+		    	$scope.dropText = text.loading;
+		    }else{
+		    	$scope.dropText = text.initial;
+		    }
+		});
+		$scope.upload = function (files) {
+	        if (files) {
+              var file = files;
+              if (!file.$error) {
+              	$scope.uploaderStatus = ST_ACTIVE;
+              	$scope.progressStatus = ST_ACTIVE;
+                Upload.upload({
+                    url: ROOT_PATH + ROOT_UPLOAD,
+                    data: {
+                      	file: file  
+                    }
+                }).then(function (resp) {
+                    $timeout(function() {
+
+                    	if( resp.data.result == 1){
+                    		var img = new Image();
+                    		var newSrc = ROOT_PATH + resp.data.token;
+							// Set image from client
+							var reader = new FileReader();
+							reader.onload = (function(theFile) {
+						       return function(e) {
+						       		mainService.ui.uploadCache = e.target.result;
+						          	// Save token url to scope for futher use
+						          	$scope.filePreview = newSrc;
+						          	$scope.uploaderStatus = ST_INACTIVE;
+						          	setTimeout(function(){
+						          		$scope.progressStatus = ST_INACTIVE;
+						          		$scope.$apply();
+						          	},10);
+						       };
+						     })(file);
+
+							// Read in the image file as a data URL.
+							reader.readAsDataURL(file);
+                    	}
+                    });
+                }, function (response) {
+		            if (response.status > 0) 
+		            	$scope.errorMsg = response.status + ': ' + response.data;
+		        }, function (evt) {
+		            $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+		        });
+              }
+	        }
+	    };
+	    $scope.setImageUploaded = function(){
+	    	var item = {
+	    		src: $scope.filePreview
+	    	}
+	    	$scope.setImagen( item , 'uploader');
+	    	// Clean gallery
+	    	for (var i = 0; i < $scope.galeria.length; i++) {
+	    		$scope.galeria[i].active="";    		
+	    	};
+	    }
+	    // As it's used renderPartial with #, this is a setTab workaround in jq
+	    function setTabActive( obj ){
+	    	$("#imagenTab").find("li").removeClass('active')
+	    	$( ".tab-pane" ).removeClass('in').removeClass('active');
+	    	obj.parent('li').addClass('active')
+	    	$(obj.attr('data-href')).addClass('in').addClass('active');
+	    }
+
 
 	})
 	.controller('PreviewCtrl',function PreviewCtrl($scope,mainService,$http){
 		var view = "p7";
 		$scope.selected = [];
 		$scope.preferences = mainService.preferences;
+		$scope.ui = mainService.ui;
 		mainService.getData().then(function(data){
 			$scope.preferences[ view ] = data[view]["estilo"];
 			mainService.currentView().seen = ST_ACTIVE;
@@ -369,7 +489,7 @@ angular.module('app',['ngRoute','ngAnimate'])
 			    });
 
 				// to remove
-			    $(".data-result").html(JSON.stringify(mainService.preferences, "\t")); // Indented 4 spaces
+			    $(".data-result").html(JSON.stringify(mainService.preferences, undefined, 4)); // Indented 4 spaces
 			    $("#result").modal("show");
 			}else{
 				alert("Debe escoger como minimo un estilos");

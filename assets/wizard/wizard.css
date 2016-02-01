@@ -109,4 +109,64 @@
 .nav.nav-tabs li a {
   cursor: pointer; }
 
+#upload {
+  font-family: 'Raleway', sans-serif; }
+  #upload .upload-section {
+    height: 380px;
+    padding: 20px; }
+    #upload .upload-section .drop-box {
+      width: 100%;
+      height: 280px;
+      border: 3px dashed #BBBBBB;
+      text-align: center;
+      padding: 70px 0px;
+      margin-bottom: 5px;
+      cursor: pointer; }
+      #upload .upload-section .drop-box.dragover {
+        border: 3px dashed #03D4AD; }
+      #upload .upload-section .drop-box .drop-text {
+        margin-bottom: 20px; }
+      #upload .upload-section .drop-box .drop-image {
+        text-align: center; }
+        #upload .upload-section .drop-box .drop-image img {
+          width: 90px; }
+    #upload .upload-section .progress {
+      line-height: 15px;
+      display: inline-block;
+      width: 100%;
+      border-radius: 0px; }
+      #upload .upload-section .progress.ng-show {
+        -webkit-animation: fadeIn 1s;
+        -moz-animation: fadeIn 1s;
+        -ms-animation: fadeIn 1s;
+        animation: fadeIn 1s; }
+      #upload .upload-section .progress.ng-hide {
+        -webkit-animation: fadeOut 1s;
+        -moz-animation: fadeOut 1s;
+        -ms-animation: fadeOut 1s;
+        animation: fadeOut 1s; }
+      #upload .upload-section .progress div {
+        background-color: #03D4AD;
+        text-align: center;
+        font-weight: bold; }
+    #upload .upload-section .image-preview {
+      height: 280px;
+      text-align: center;
+      background-color: #DADADA;
+      margin-bottom: 10px; }
+      #upload .upload-section .image-preview.preview {
+        padding: 99px 0px; }
+        #upload .upload-section .image-preview.preview img {
+          opacity: 0.2; }
+      #upload .upload-section .image-preview img {
+        width: auto;
+        height: 100%; }
+    #upload .upload-section .previewText {
+      display: inline-block;
+      margin-top: 18px;
+      font-weight: bold; }
+    #upload .upload-section .btn-continue {
+      background-color: #000;
+      color: #fff; }
+
 /*# sourceMappingURL=wizard.css.map */

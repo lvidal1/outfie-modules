@@ -186,6 +186,8 @@
   <script src="assets/angular/angular.min.js"></script>
   <script src="assets/angular/angular.route.js"></script>
   <script src="assets/angular/angular-animate.js"></script>
+  <script src="assets/angular/angularUtils/ng-file-upload-shim.min.js"></script>
+  <script src="assets/angular/angularUtils/ng-file-upload.min.js"></script>
   <script src="assets/wizard/wizard.js"></script>
   <script>
     (function($) {
@@ -210,11 +212,10 @@
       }
 
       $(document).on("click",'#imagenTab a',function (e) {
-        $("#imagenTab").find("li").removeClass('active')
-        $( ".tab-pane" ).removeClass('in').removeClass('active');
-        $(this).parent('li').addClass('active')
-        $($(this).attr('data-href')).addClass('in').addClass('active');
-
+          $("#imagenTab").find("li").removeClass('active')
+          $( ".tab-pane" ).removeClass('in').removeClass('active');
+          $(this).parent('li').addClass('active')
+          $($(this).attr('data-href')).addClass('in').addClass('active');
           e.preventDefault();
       });
 
