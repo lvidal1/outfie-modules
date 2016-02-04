@@ -82,7 +82,8 @@ angular.module('app',['ngRoute','ngAnimate','ngFileUpload'])
 			preferences : {},
 			ui:{
 				nav:ST_INACTIVE,
-				uploadCache: ST_INACTIVE
+				uploadCache: ST_INACTIVE,
+				dateCache: ST_INACTIVE
 			}
 		}
 	})
@@ -113,6 +114,36 @@ angular.module('app',['ngRoute','ngAnimate','ngFileUpload'])
 	    	}, 0);        
 	  	};
 	})
+	.directive('datepicker',['$timeout','mainService', function($timeout,mainService) {
+	    return {
+	        restrict: 'A',
+	        scope: {},
+	        link: function postLink(scope, elem, attrs) {
+
+	        	var dataOptions = {
+	        		startDate: new Date(),
+				  	todayHighlight: true,
+				  	language: "es"
+				}
+
+				if( mainService.ui.dateCache ){
+					// Set selected option
+					//dataOptions.startDate = mainService.preferences["p3"].dateFormatted;
+				}
+	        	
+	        	elem.datepicker(dataOptions);
+
+				elem.on("changeDate", function(e) {
+
+					var dateFormatted = e.format();
+
+					var date = moment(e.format().toString(), "DD/MM/YYYY").format("YYYY-MM-DD");
+					var item = { dateFormatted: dateFormatted ,date: date }
+					scope.$parent.setFecha( item , 1 );
+				});
+	        }
+	    }
+	}])
 	.controller('NavCtrl',function NavCtrl($scope,$location,mainService){
 		// Reset to default view
 		$location.path('#/', false);
@@ -149,7 +180,6 @@ angular.module('app',['ngRoute','ngAnimate','ngFileUpload'])
 			mainService.setNavText( { text: item.text} );
 			mainService.nextView();
 		}
-
 	})
 	.controller('DondeCtrl',function DondeCtrl($scope,mainService){
 
@@ -225,7 +255,6 @@ angular.module('app',['ngRoute','ngAnimate','ngFileUpload'])
 				break;
 			}
 		}
-
 	})
 	.controller('CuandoCtrl',function CuandoCtrl($scope,mainService){
 
@@ -250,9 +279,22 @@ angular.module('app',['ngRoute','ngAnimate','ngFileUpload'])
 				};
 			}
 		});
-		$scope.setFecha = function(item){
+		$scope.setFecha = function(item ,typeText){
 			$scope.preferences[ view ] = item;
-			mainService.setNavText( { text: "En "+ item.number + " "+ item.unit} );
+			var text;	
+			switch( typeText ){
+				// Number of days 
+				case 0:
+					mainService.ui.dateCache = ST_INACTIVE; 
+					text = "En "+ item.number + " "+ item.unit
+				break
+				// Date format
+				case 1:
+					mainService.ui.dateCache = ST_ACTIVE;
+					text = "El "+ item.dateFormatted
+				break;
+			}
+			mainService.setNavText( { text: text});
 			mainService.nextView();
 		}
 
@@ -448,8 +490,6 @@ angular.module('app',['ngRoute','ngAnimate','ngFileUpload'])
 	    	obj.parent('li').addClass('active')
 	    	$(obj.attr('data-href')).addClass('in').addClass('active');
 	    }
-
-
 	})
 	.controller('PreviewCtrl',function PreviewCtrl($scope,mainService,$http){
 		var view = "p7";

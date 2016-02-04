@@ -786,7 +786,7 @@ a:hover{
 	position: absolute;
 	top: 10%;
 	width: 1px;
-	background-color: #ccc;
+Tabs	background-color: #ccc;
 }
 
 .product-featured__item.first:before{
@@ -1409,6 +1409,57 @@ a:hover{
 	font-weight: 400;
 }
 
+.create-dilema__heading h2{
+	font-family: 'Raleway', sans-serif;
+	font-size: 30px;
+	font-weight: 400;
+}
+
+.create-dilema__tabs{
+	width: 100%;
+}
+
+.create-dilema__tabs .nav-tabs{
+	width: 100%;
+	text-align: center;
+	border-color: #000;
+}
+
+.create-dilema__tabs .nav-tabs li{
+	display: inline-block;
+	float: none;
+	margin: 0;
+}
+
+.create-dilema__tabs .nav-tabs > li a{
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+	color: #000;
+	font-size: 16px;
+	font-weight: 700;
+	text-transform: uppercase;
+	border: 2px solid #000;
+	border-bottom: 0;
+	border-radius: 10px 10px 0 0;
+	margin: 0 5px;
+	padding: 5px 20px;
+}
+
+.create-dilema__tabs .nav-tabs > li.active > a,
+.create-dilema__tabs .nav-tabs > li > a:hover{
+	background-color: #03D4AD;
+	color: #fff;
+}
+
+.create-dilema__tabs .nav-tabs > li > a{
+	background-color: #fff;
+}
+
+.create-dilema__tabs .nav-tabs > li.active > a:hover{
+	border: 2px solid #000;
+	border-bottom: 0;
+	background-color: #03D4AD;
+}
+
 .create-dilema__carousel{
 	padding: 20px 0;
 }
@@ -1777,7 +1828,7 @@ a:hover{
 	text-align: center;
 	display: inline-block;
 	position: relative;
-	padding: 0 10px;
+	padding: 0 8px;
 	min-height: 62px;
 	vertical-align: top;
 }
@@ -1850,6 +1901,21 @@ a:hover{
 	font-family: 'Raleway', sans-serif;
 }
 
+.create-features__title-divider:before {
+  border: medium solid transparent;
+  content: "";
+  right: -8px;
+  top: 10px;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 8px 0 8px 8px;
+	border-color: transparent transparent transparent #dddddd;
+}
+
 .create-features__title-divider .vertical-text{
 	-ms-transform: rotate(-90deg);
 	-moz-transform: rotate(-90deg);
@@ -1862,7 +1928,14 @@ a:hover{
 
 .create-features__dilema{
 	display: inline-block;
-	padding: 0 15px;
+	padding: 0 10px;
+}
+
+.create-features__dilema .title{
+	font-style: italic;
+	font-weight: 700;
+	font-size: 1.125em;
+	margin-bottom: 5px;
 }
 
 .create-features__dilema-box{
@@ -1872,6 +1945,14 @@ a:hover{
 .create-features__dilema-box a{
 	display: inline-block;
 	text-align: center;
+	font-family: 'Raleway', sans-serif;
+	font-size: 9px;
+	text-transform: uppercase;
+}
+
+.create-features__dilema-box a .titul{
+	width: 100%;
+	display: inline-block;
 }
 
 .clothing-category{
@@ -2010,6 +2091,10 @@ a:hover{
 	text-align: center;
 }
 
+.clothing-filters__subcategory .subcategory-carousel .item a{
+	font-style: italic;
+}
+
 .clothing-filters__subcategory .owl-prev {
 	position: absolute;
 	top: 0;
@@ -2030,6 +2115,33 @@ a:hover{
 
 .clothing-filters__search .search-form{
 	max-width: 240px;
+}
+
+.clothing-filters__search .search-form .select2-container--default .select2-selection--multiple{
+	border-radius: 0;
+	border-color: #CDCDCD;
+}
+
+/* FINALIZE */
+
+.finalize-box{
+	width: 100%;
+	position: absolute;
+	bottom: 20px;
+	text-align: center;
+	z-index: 8888;
+}
+
+.finalize-box .btn-finalize{
+	background: #000;
+	color: #fff;
+	font-size: 24px;
+	text-transform: uppercase;
+	padding: 6px 50px;
+}
+
+.finalize-box .btn-finalize:hover{
+	background: #03D4AD;
 }
 
 /*===================
@@ -2399,6 +2511,45 @@ a:hover{
 }
 
 /*===================
+      CALENDAR
+====================*/
+
+.calendar-picker{
+	width: 100%;
+	padding: 0 30px;
+}
+
+.calendar-picker .datepicker-inline{
+	width: 100%;
+}
+
+.calendar-picker .datepicker table{
+	width: 100%;
+	font-family: 'Raleway', sans-serif;
+	border-spacing: 10px 4px;
+  border-collapse: separate;
+}
+
+.calendar-picker .datepicker table thead{
+	border-bottom: 1px solid #000;
+}
+
+.calendar-picker .datepicker table tr td{
+	-webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border: 1px solid #eee;
+}
+
+.calendar-picker .datepicker table tr td.today,
+.calendar-picker .datepicker table tr td.today:hover,
+.calendar-picker .datepicker table tr td.today.disabled,
+.calendar-picker .datepicker table tr td.today.disabled:hover{
+	background: #03D4AD;
+}
+
+
+/*===================
       LABELS
 ====================*/
 
@@ -2440,3 +2591,5 @@ a:hover{
 .btn-share{
 	background-position: 0 0;
 }
+
+
