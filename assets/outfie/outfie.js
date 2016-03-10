@@ -79,7 +79,9 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 					for (var i = 0; i < categories.length; i++) {
 						categories[i].status = ST_INACTIVE;
 					};
-					categories[index].status = ST_ACTIVE;
+					if(index !== null){
+						categories[index].status = ST_ACTIVE;
+					}
 				}
 	  		},
 	  		subcategories:{
@@ -94,7 +96,10 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 					for (var i = 0; i < subcategories.length; i++) {
 						subcategories[i].status = ST_INACTIVE;
 					};
-					subcategories[index].status = ST_ACTIVE;
+					console.log("A:",index);
+					if(index !== null){
+						subcategories[index].status = ST_ACTIVE;
+					}
 				}
 	  		},
 	  		range:{
@@ -487,7 +492,36 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 				})
 	       }
 	    }
-	})        
+	})
+	
+	.directive('shortcut', function(mainService) {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: true,
+    
+    link:    function postLink(scope, elem, attrs){
+    	
+    	scope.$watch(function () {
+				return mainService.config.get().done;
+			},function(n,o){
+		  	jQuery(document).on('keypress', function(e){
+         //scope.$apply(scope.keyPressed(e));
+         //alert(e.keyCode);
+         if(e.keyCode==127)
+         {
+         	$scope.deleteLayer();
+         }
+         
+       });
+	   	});
+	        	
+      
+    }
+  };
+	})
+	
+	
 	.controller('FilterController',function FilterController($scope,$location,$timeout,mainService){
 
 		// Containers - Scope
@@ -559,11 +593,28 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 			mainService.config.set( "category" , item );
 			mainService.categories.setActive( index );
 
-			$scope.setSubCategoryActive( 0 );
+			$scope.setSubCategoryActive( null );
 		}
 		$scope.setSubCategoryActive = function( index , item){
-			mainService.config.set( "subcategory" , item );
-			mainService.subcategories.setActive( index );
+			// Toogle activation of subcategory on clic, if item have been clicked
+			var set,i;
+			if(	
+				mainService.config.get( "subcategory" ).subcategory === undefined ||
+				mainService.config.get( "subcategory" ).subcategory === false
+			){
+				set = item;
+				i = index;
+			}else{
+				if(mainService.config.get( "subcategory" ).subcategory.id !== index){
+					set = item;
+					i = index;
+				}else{
+					set = false;
+					i = null;
+				}
+			}
+			mainService.config.set( "subcategory" , set );
+			mainService.subcategories.setActive( i );
 		}
 		$scope.isActive = function( categoryStatus ){
 			if( categoryStatus == ST_ACTIVE ){
@@ -1047,6 +1098,11 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	    $scope.finishCollection = function(){
 	    	$scope.finishPage = true;
 	    }
+	    
+	    $scope.unfinishCollection = function(){
+	    	$scope.finishPage = false;
+	    }
+	    
 	    $scope.setStyle = function(item,index){
 	    	for (var i = 0; i < $scope.styles.length; i++) {
 	    		$scope.styles[i].select = "";
@@ -1106,6 +1162,14 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			crop(condition,$scope.points,canvas,jqCanvas,$scope.image);
 			$scope.setCropStatus( ST_ACTIVE );
+		}
+
+		// Set status of disabled button when there are 3 pairs(x,y) of points
+		$scope.finishStatus = function(){
+			if( $scope.points.length < 6){
+				return true;
+			}
+			return false;
 		}
 
 		$scope.createNewImage = function(){
@@ -1292,6 +1356,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 		                oldposy = e.offsetY;
 
 		                $(".canvas-layer > .wrap").append(pointer);
+		                $scope.$apply();
 		            }
 		            posx = e.offsetX;
 		            posy = e.offsetY;

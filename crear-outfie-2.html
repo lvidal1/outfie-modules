@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
-<!-- Mirrored from sandbox.bmgcenter.com/outfie/crear-outfie.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 21 Jan 2016 06:39:04 GMT -->
+<!-- Mirrored from outfie.bmgcenter.com/crear-outfie-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Mar 2016 02:10:29 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
 <head>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!-- meta viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>Outfie</title>
   <!-- Google font -  Open Sans -->
-  <link href='https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,200,300,700' rel='stylesheet' type='text/css'>
+  <!-- <link href='https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,200,300,700' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Raleway:400,700,600,500,300' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
-
+ -->
   <!-- Bootstrap core CSS -->
   <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
   <link href="assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
 
   <!-- Bootstrap core CSS -->
   <link href="css/animate.css" rel="stylesheet">
-	<link href="css/shortcodes.css" rel="stylesheet">
+  <link href="../sandbox.bmgcenter.com/outfie/css/shortcodes.css" rel="stylesheet">
 	<!-- Outfie -->	
   <link href="assets/jqueryui/jquery-ui.theme.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/outfie/outfie.css">
 
-  <link href="css/style.css" rel="stylesheet">
+  <link href="../sandbox.bmgcenter.com/outfie/css/style.css" rel="stylesheet">
   <!--[if lt IE 9]>
     <script src="js/html5shiv.min.js"></script>
     <script src="js/respond.min.js"></script>
@@ -37,10 +39,13 @@
 	<!-- Ion Range Slider-->
 	<link href="assets/rangeslider/css/ion.rangeSlider.css" rel="stylesheet">
 	<link href="assets/rangeslider/css/ion.rangeSlider.skinNice.css" rel="stylesheet">
+	<!-- Tooltip -->
+	<link rel="stylesheet" href="assets/lite/LiteTooltip.css">
   
 </head>
 
 <body>
+
 
   <!-- Navbar -->
   <nav class="navbar navbar-default navbar-fixed-top">
@@ -102,8 +107,10 @@
                       <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
+                      <li>
+	                      <a href="#">Action</a>
+	                      <a href="#">Another action</a>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -148,11 +155,11 @@
 										<div class="create-features">
 											<div class="create-features__item">
 												<h5>Cuerpo</h5>
-													<a href="#" data-toggle="tooltip" data-placement="auto bottom" title="tomboy"><img src="img/icons/cuerpo-pera.png"></a>
+												<a class="lite-tooltip" href="#" data-title="pera" data-location="bottom"><span class="cicon-40-pera"></span></a>
 											</div>
 											<div class="create-features__item">
 												<h5>Rostro</h5>
-													<a href="#" data-toggle="tooltip" data-placement="auto bottom" title="tomboy"><img src="img/icons/rostro1.svg"></a>
+												<a class="lite-tooltip" href="#" data-title="verano" data-location="bottom"><span class="ricon-40-primavera"></span></a>
 											</div>
 											<div class="create-features__item">
 												<h5>Edad</h5>
@@ -160,23 +167,34 @@
 											</div>
 											<div class="create-features__item">
 												<h5>Estilo</h5>
-													<a href="#" data-toggle="tooltip" data-placement="auto bottom" title="tomboy"><span class="sicon-40-tomboy"></span></a>
-													<a href="#" data-toggle="tooltip" data-placement="auto bottom" title="casual"><span class="sicon-40-casual"></span></a>
-													<a href="#" data-toggle="tooltip" data-placement="auto bottom" title="hipster"><span class="sicon-40-hipster"></span></a>
+													<a class="lite-tooltip" href="#" data-title="tombot" data-location="bottom"><span class="sicon-40-tomboy"></span></a>
+													<a class="lite-tooltip" href="#" data-title="casual" data-location="bottom"><span class="sicon-40-casual"></span></a>
+													<a class="lite-tooltip" href="#" data-title="hipster" data-location="bottom"><span class="sicon-40-hipster"></span></a>
 											</div>
 											<div class="create-features__item">
 												<h5>Mas</h5>
-												<a href="#" data-toggle="tooltip" data-placement="auto bottom" title="more"><img src="img/icons/plus.png"></a>
+												<a class="lite-tooltip" href="#" data-title="mas" data-location="bottom">
+													<span class="bicon-40-plus"></span>
+												</a>
 											</div>
 											<div class="create-features__title-divider">
 												<div class="vertical-text">DILEMA</div>
 											</div>
 											<div class="create-features__dilema">
-												<p>¿Qué me pongo para mi graduación?</p>
+												<p class="title">¿Que me pongo para la fiesta?</p>
 												<div class="create-features__dilema-box">
-													<a href="#" title="">Playa</a>
-													<a href="#" title="">Cancun</a>
-													<a href="#" title="">Sol y Luna</a>
+													<a href="#" title="">
+														<span class="oicon-30-playa"></span>
+														<span class="titul">Playa</span>
+													</a>
+													<a href="#" title="">
+														<span class="oicon-30-deporte"></span>
+														<span class="titul">Cancun</span>
+													</a>
+													<a href="#" title="">
+														<span class="oicon-30-cocktail"></span>
+														<span class="titul">Sol y Luna</span>
+													</a>
 												</div>
 											</div>
 											<div class="create-features__item">
@@ -184,8 +202,19 @@
 												<span class="price-badge">$155</span>
 											</div>
 											<div class="create-features__item">
-												<h5>Ver imagen</h5>
-												<a href="#" title=""><img src="img/icons/camera.png" alt="" /></a>
+												<a class="image-view" href="#" data-container="body" data-toggle="popover" data-placement="bottom">
+													<h5>Ver imagen</h5>
+													<img src="img/icons/camera.png" alt="" />
+												</a>
+												<div id="imageContent" style="display: none;">
+													<div class="image-text">
+														<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+													</div>
+													<div class="image-media">
+														<img src="http://placehold.it/530x400" alt="">
+													</div>
+												</div>
+												<div class="popover-wrap"></div>
 											</div>
 										</div>
 									</div>
@@ -194,6 +223,7 @@
 						</div>
 						
 						<div class="outfie-app" ng-app="appOutfie">
+						<shortcut></shortcut>
 							<div class="app-filter" ng-controller="FilterController" pluginsfor="filter">
 								<div class="clothing-category">
 									<data-owl-carousel class="owl-carousel clothing-carousel" id="clothing-carousel" data-options="1">
@@ -212,12 +242,12 @@
 												<div class="content">
 													<h4>SUBCATEGORÍAS</h4>
 													<data-owl-carousel id="subcategory-carousel" class="subcategory-carousel owl-carousel" data-options="2">
-														<div class="item" owl-carousel-item="" ng-repeat="item in subcategories"><a href="#" title="" ng-click="setSubCategoryActive($index,item)" ng-class="isActive(item.status)">{{item.text}}</a></div>
+														<div class="item" owl-carousel-item="" ng-repeat="item in subcategories"><a href="#" class="subcategory" title="" ng-click="setSubCategoryActive($index,item)" ng-class="isActive(item.status)">{{item.text}}</a></div>
 												    </data-owl-carousel>
 												</div>
 											</div>
 											<div class="clothing-filters__price-range section">
-												<h4>Rango de precios ${{range.min}} - ${{range.max}}</h4>
+												<h4>Rango de precios <span class="precios">${{range.min}} - ${{range.max}}</span></h4>
 												<input id="price-range" class="hide irs-hidden-input" readonly ionrangeslider>
 											</div>
 											<div class="clothing-filters__search section">
@@ -233,7 +263,7 @@
 											<div class="clothing-filters__color section">
 												<h4>Color</h4>
 												<input type='text' class="basic" colorpicker/>
-												<button class="btn btn-sm" title="Limpiar color" id="btnClearColor"ng-click="clearColor()">x</button>
+												<button class="btn btn-sm" title="Limpiar color" id="btnClearColor" ng-click="clearColor()">x</button>
 											</div>
 										</div>
 									</div>
@@ -244,16 +274,18 @@
 									<div class="wrapper">
 										<div class="sand-layer" id="product-page">
 											<div class="products-page">
-												<div class="sand-image" dir-paginate="item in filtered = (products  | filter: {cat : config.category.id}:true |  filter: {sub : config.subcategory.id}:true | filter:byPrice('price') | filter:byStore('store') | filter:byBrand('brand') | filter:byColor('color')) | itemsPerPage: pageSize" current-page="currentPage"
-												data-drag="true" data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" ng-model="products" jqyoui-draggable="{index:$index,applyFilter:'{{getIndex(item)}}',placeholder: 'keep',deepCopy :true}"
-												uib-tooltip="{{getCategoria(item.cat)}} | {{getSubCategoria(item.cat)}} |  {{getTienda(item.store)}} | {{getMarca(item.brand)}} " tooltip-placement="top" tooltip-append-to-body="true"
+												<div class="sand-image" 
+												dir-paginate="item in filtered = (products  | filter: {cat : config.category.id}:true |  filter: {sub : config.subcategory.id}:true | filter:byPrice('price') | filter:byStore('store') | filter:byBrand('brand') | filter:byColor('color')) | itemsPerPage: pageSize" 
+												current-page="currentPage"
+												data-drag="true" 
+												data-jqyoui-options="{revert: 'invalid', helper: 'clone'}" 
+												ng-model="products" 
+												jqyoui-draggable="{index:$index,applyFilter:'{{getIndex(item)}}',placeholder: 'keep',deepCopy :true}"
+												uib-tooltip="{{getCategoria(item.cat)}} | {{getSubCategoria(item.sub)}} |  {{getTienda(item.store)}} | {{getMarca(item.brand)}} " tooltip-placement="top" tooltip-append-to-body="true"
 												rel="tooltip"
 												>
 									                <div class="wrap">
-									                	<div class="info">
-									                		<span>${{item.price}}</span>
-									                		<span style="width:10px;height:10px;display: inline-block;float: left;left: 0px;background-color:{{item.color}}"></span>
-									                	</div>
+									                	
 									                	<img src="{{item.url}}">
 									                </div>
 									            </div>
@@ -276,6 +308,7 @@
 									        </div>
 								        </div>
 								        <div class="sand-layer" id="finish-page" ng-show="finishPage" style="visibility:hidden;">
+													<a ng-click="unfinishCollection()" class="close-finish" href="#"><img src="img/close-white-icon.png" /></a>
 								        	<div class="layer-bg">
 								        	</div>
 								        	<div class="layer-content">
@@ -292,7 +325,7 @@
 								        		</div>
 								        		<div class="finish-styles text-center">
 								        			<div class="style-item"  ng-repeat="item in styles">
-									        			<a class="style120 {{item.class}} {{item.select}}" href="" title="" ng-click="setStyle(item,$index)">
+									        			<a class="style120 {{item.class}} {{item.select}}" href="#" title="" ng-click="setStyle(item,$index)">
 									        			</a>
 									        			<div class="style-text">{{item.text}}</div>
 								        			</div>
@@ -304,8 +337,13 @@
 								        			<textarea ng-model="suggestion"></textarea>
 								        		</div>
 								        		<div class="finish-button">
+															<div class="share-outfie pull-left">
+																<h5>Compatir en:</h5>
+																<a class="btn-social btn-facebook" href="#" title=""></a>
+																<a class="btn-social btn-twitter" href="#" title=""></a>
+															</div>
 								        			<div class="pull-right">
-								        				<div class="btn btn-black-lg" id="btn-publish" ng-click="saveOutfie()">
+								        				<div class="btn btn-publish" id="btn-publish" ng-click="saveOutfie()">
 								        					Publicar
 								        				</div>
 								        			</div>
@@ -314,23 +352,25 @@
 								        </div>
 							        </div>
 						        </div>
+										
 								<div class="sand-section">
 
 									<div class="sand-wrap">
 										<div class="box">
-											<div class="box-header" ng-hide="ignoredImages()">
-												<button class="btn btn-xs" ng-click="finishCollection()">Guardar outfie</button>
-												<button class="btn btn-xs" ng-click="cropInit()">Cortar</button>
-												<button class="btn btn-xs" ng-click="moveLayerUp()">Traer adelante</button>
-												<button class="btn btn-xs" ng-click="moveLayerToFront()">Traer al Frente</button>
-												<button class="btn btn-xs" ng-click="moveLayerDown()">Enviar atrás</button>
-												<button class="btn btn-xs" ng-click="moveLayerToBehind()">Enviar al Fondo</button>
-												<button class="btn btn-xs" ng-click="deleteLayer()">Borrar</button>
+											<div class="box-header box-buttons" ng-hide="ignoredImages()">
+												
+												<button class="btn btn-xs" ng-click="cropInit()">Cortar <span class="cut"></span></button>
+												
+												<button class="btn btn-xs" ng-click="moveLayerUp()">Traer adelante <span class="forward"></span></button>
+												
+												<button class="btn btn-xs" ng-click="moveLayerDown()">Enviar atrás <span class="backward"></span></button>
+												
+												<button class="btn btn-xs" ng-click="deleteLayer()">Borrar <span class="delete"></span></button>
 											</div>
 											<div class="box-ground">
 												<div class="wrap" id="sand-ground" data-drop="true" ng-model='box' jqyoui-droppable="{multiple:true, deepCopy:true ,beforeDrop :'setDropImageInfo'}" >
-													<div class="draggable" ng-repeat="item in box track by $index" resizable this-item="item" zindex="item.zindex"ng-mousedown="setActive($index)" ng-hide="item.removed" style="visibility:hidden;" >
-														<img src="{{item.url}}" >
+													<div class="draggable" ng-repeat="item in box track by $index" resizable this-item="item" zindex="item.zindex" ng-mousedown="setActive($index)" ng-hide="item.removed" style="visibility:hidden;" >
+														<img src="{{item.url}}">
 													</div>
 												</div>
 												<div class="text-center box-message" ng-show="ignoredImages()">
@@ -342,7 +382,7 @@
 										
 										<div class="crop" ng-controller="CropController" ng-class="isActive( status )">
 											<div class="crop-header">
-												<button class="btn btn-xs" ng-click="createNewImage()">Listo</button>
+												<button class="btn btn-xs" ng-click="createNewImage()" ng-disabled="finishStatus()">Listo</button>
 												<button class="btn btn-xs" ng-click="setCropStatus(0)">Cancelar</button>
 											</div>
 											<div class="crop-image">
@@ -352,6 +392,11 @@
 													</div>
 												</div>
 											</div>
+										</div>
+										
+										<div class="finalize-box" ng-hide="ignoredImages()">
+											<a class="btn btn-finalize" ng-click="finishCollection()">Terminar</a>
+											
 										</div>
 									</div>
 								</div>
@@ -371,7 +416,7 @@
 		</div>
 	</section>
 	<!-- Footer -->
-	<footer class="footer">
+	<footer class="footer create-oufie">
 		<div class="container">
 		
 		</div>
@@ -413,7 +458,7 @@
 	<!-- Ion Range Slider-->
   	<script type="text/javascript" src="assets/rangeslider/js/ion.rangeSlider.min.js"></script>
 	<!-- Select 2 -->
-	<link rel="stylesheet" type="text/css" href="assets/select2/css/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/select2/css/select2-mod.css">
 	<script src="assets/select2/js/select2.min.js"></script>
 	<!-- Spectrum -->
 	<link rel="stylesheet" type="text/css" href="assets/spectrum/spectrum.css">
@@ -425,8 +470,12 @@
 	<script src="assets/angular/ui.bootstrap.min.js"></script>
 	<script src="assets/angular/angularUtils/dirPagination.js"></script>
 	<script src="assets/angular/angularUtils/angular-dragdrop.js"></script>
-
+	
 	<script src="assets/outfie/outfie.js"></script>
+	
+	<!-- Tooltip -->
+	<script src="assets/lite/LiteTooltip.js"></script>
+	
 	<script>
 		(function($) {
 			
@@ -442,11 +491,17 @@
 					 {
 							$('.navbar-brand').fadeOut();
 							$('.userbar').fadeOut();
+							$('.clothing-category').hide();
+							$('.clothing-filters').hide();
+							$('.create-header').addClass('outfie-toolbar-user-fixed');
 					 }
 					else
 					 {
 						$('.navbar-brand').fadeIn();
 						$('.userbar').fadeIn();
+						$('.clothing-category').show();
+						$('.clothing-filters').show();
+						$('.create-header').removeClass('outfie-toolbar-user-fixed');
 					 }
 				});
 			
@@ -457,6 +512,12 @@
 			/*  [ Bootstrap Tooltip ]
 			- - - - - - - - - - - - - - - - - - - - */				
 			$('[data-toggle="tooltip"]').tooltip();
+			
+			$('.lite-tooltip').LiteTooltip({
+        location: 'bottom',
+        padding: 3,
+        margin: 1,
+			});
 			
 			/*  [ Ion Range Slider ]
 			- - - - - - - - - - - - - - - - - - - - */	
@@ -472,11 +533,22 @@
 			// 	grid: false
 			// });
 			
+			$('.image-view').popover({ 
+				html : true, 
+				container: '.popover-wrap',
+				content: $('#imageContent').html()
+			});
 			
 		})(jQuery);
+		
+		
+
+		
 	</script>
 		
 </body>
 
 <!-- Mirrored from sandbox.bmgcenter.com/outfie/crear-outfie.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 21 Jan 2016 06:39:11 GMT -->
+
+<!-- Mirrored from outfie.bmgcenter.com/crear-outfie-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 10 Mar 2016 02:10:51 GMT -->
 </html>

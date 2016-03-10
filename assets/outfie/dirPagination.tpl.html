@@ -1,12 +1,15 @@
 <ul class="pagination" ng-if="1 < pages.length">
     <li ng-if="directionLinks" ng-class="{ disabled : pagination.current == 1 }" class="ng-scope">
-        <a href="" ng-click="setCurrent(pagination.current - 1)" class="ng-binding">‹</a>
+        <a href="#" ng-click="setCurrent(pagination.current - 1)" class="ng-binding prev">‹</a>
     </li>
+    <li>Página</li>
     <li>
-        <span> Pagina {{pagination.current}} de {{ pages.length}}
+        <span class="current-page">{{pagination.current}}</span>
     </li>
+    
+    <li>De {{ pages.length}}</li>
 
     <li ng-if="directionLinks" ng-class="{ disabled : pagination.current == pagination.last }" class="ng-scope">
-        <a href="" ng-click="setCurrent(pagination.current + 1)" class="ng-binding">›</a>
+        <a href="#" ng-click="setCurrent(pagination.current + 1)" class="ng-binding next">›</a>
     </li>
 </ul>
