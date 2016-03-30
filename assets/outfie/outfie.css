@@ -328,3 +328,18 @@
 a.subcategory.active {
     color: #00A888;
 }
+.ot-icon.cut {
+    background: url(../../img/cut-icon.png) no-repeat center center;
+    display: inline-block;
+    width: 20px;
+    height: 18px;
+    float: left;
+    margin-right: 5px;
+}
+.btn-cut {
+    background-color: rgb(3, 212, 173);
+    color: #FFF;
+}
+.btn-cut:disabled{
+  background-color: #76E8D2;
+}
