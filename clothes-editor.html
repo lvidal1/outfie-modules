@@ -23,12 +23,12 @@
 
 <!-- Bootstrap core CSS -->
 <link href="css/animate.css" rel="stylesheet">
-<link href="../sandbox.bmgcenter.com/outfie/css/shortcodes.css" rel="stylesheet">
+<link href="css/shortcodes.css" rel="stylesheet">
 <!-- Outfie -->	
 <link href="assets/jqueryui/jquery-ui.theme.min.css" rel="stylesheet">
-<link rel="stylesheet" href="assets/outfie/outfie.css">
+<link rel="stylesheet" href="assets/clothes-editor/outfie.css">
 
-<link href="../sandbox.bmgcenter.com/outfie/css/style.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
   <!--[if lt IE 9]>
     <script src="js/html5shiv.min.js"></script>
     <script src="js/respond.min.js"></script>
@@ -65,19 +65,7 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right">
 						<li>
-							<a href="index.html"><span>Descubre</span></a>
-						</li>
-						<li class="divider"><span></span></li>
-						<li>
-							<a href="recomienda.html"><span>Recomienda</span></a>
-						</li>
-						<li class="divider"><span></span></li>
-						<li class="active">
-							<a href="dilema.html"><span>Inspírate</span></a>
-						</li>
-						<li class="divider"><span></span></li>
-						<li>
-							<a href="#"><span>Compra</span></a>
+							<a href="index.html"><span>Modules</span></a>
 						</li>
 						<li class="divider"><span></span></li>
 					</ul>
@@ -101,7 +89,7 @@
 												</div>
 												<div class="media-body">
 													<span>Estás sola </span>
-													<h4 class="media-heading">ALEXIA</h4>
+													<h4 class="media-heading">User</h4>
 												</div>
 											</div>
 											<b class="caret"></b>
@@ -296,14 +284,14 @@
 											<div class="loader"></div>
 										</span>
 										<span class="icon" ng-show="config.sandbox.status">
-											<img src="assets/outfie/noitem-icon.png">
+											<img src="assets/clothes-editor/noitem-icon.png">
 										</span>
 									</div>
 									<div class="clearfix"></div>
 								</div>
 								<div class="products-pagination">
 									<div class="text-center">
-										<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="assets/outfie/dirPagination.tpl.html"></dir-pagination-controls>
+										<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="assets/clothes-editor/dirPagination.tpl.html"></dir-pagination-controls>
 									</div>
 								</div>
 							</div>
@@ -314,7 +302,7 @@
 								<div class="layer-content">
 									<div class="finish-greet">
 										<span class="greet">
-											¡¡Que gran combinación <span id="user-from">Alexia</span>!!
+											¡¡Que gran combinación <span id="user-from">User</span>!!
 										</span>
 										<span class="greet">
 											Dile a <span id="user-to">Mariana</span>:
@@ -394,13 +382,13 @@
 									</div>
 									<div class="text-center box-message" ng-show="ignoredImages()">
 										<span class="message">{{messageBox}}</span>
-										<span class="icon"><img src="assets/outfie/drag-icon.png"></span>
+										<span class="icon"><img src="assets/clothes-editor/drag-icon.png"></span>
 									</div>
 								</div>
 							</div>
 
 							<div class="finalize-box" ng-hide="ignoredImages()">
-								<a class="btn btn-finalize" ng-click="finishCollection()">Terminar</a>
+								<a class="btn btn-finalize" ng-click="saveOutfie()">Terminar</a>
 							</div>
 						</div>
 					</div>
@@ -474,8 +462,8 @@
 <script src="assets/angular/ui.bootstrap.min.js"></script>
 <script src="assets/angular/angularUtils/dirPagination.js"></script>
 <script src="assets/angular/angularUtils/angular-dragdrop.js"></script>
-
-<script src="assets/outfie/outfie.js"></script>
+<!-- App js -->
+<script src="assets/clothes-editor/outfie.js"></script>
 
 <!-- Tooltip -->
 <script src="assets/lite/LiteTooltip.js"></script>
@@ -511,8 +499,6 @@
 				});
 
 			}
-
-			
 			
 			/*  [ Bootstrap Tooltip ]
 			- - - - - - - - - - - - - - - - - - - - */				
@@ -524,19 +510,6 @@
 				margin: 1,
 			});
 			
-			/*  [ Ion Range Slider ]
-			- - - - - - - - - - - - - - - - - - - - */	
-			
-			// $("#price-range").ionRangeSlider({
-			// 	type: "double",
-			// 	min: 50,
-			// 	max: 650,
-			// 	from: 1200,
-			// 	to: 1800,
-			// 	hide_min_max: true,
-			// 	hide_from_to: false,
-			// 	grid: false
-			// });
 
 $('.image-view').popover({ 
 	html : true, 

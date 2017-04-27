@@ -2331,6 +2331,16 @@ Tabs	background-color: #ccc;
 	font-weight: 400;
 }
 
+.centered {
+   text-align: center;
+   font-size: 0;
+}
+.centered > div {
+   float: none;
+   display: inline-block;
+   text-align: left;
+   font-size: 13px;
+}
 /*===================
       FOOTER
 ====================*/
@@ -2339,6 +2349,20 @@ Tabs	background-color: #ccc;
 	background: #000;
 	min-height: 200px;
 }
+.footer.footer-fixed{
+	position: fixed;
+	bottom: 0;
+	width:100%;
+	min-height: 80px;
+}
+
+@media (max-width: 768px){
+	.footer.footer-fixed{
+		position: initial;
+		width:100%;
+	}
+}
+
 
 .style120{
 	width: 120px;

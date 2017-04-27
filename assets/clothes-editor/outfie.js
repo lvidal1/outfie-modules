@@ -1,4 +1,4 @@
-var ROOT_PATH = "assets/outfie/";
+var ROOT_PATH = "assets/clothes-editor/";
 var ST_ACTIVE = true;
 var ST_INACTIVE = false;
 var ROOT_USERDATA = "ws.user.json";
@@ -1111,7 +1111,7 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 	    	$scope.styleSelected = item.id;
 	    }
 	    $scope.saveOutfie = function(){
-	    	if($scope.box.length >= 1 && $scope.styleSelected && $scope.suggestion){
+	    	if($scope.box.length >= 1){
 	    		// Splice all removed elemented
 	    		var box = $scope.box;
 				for (var i = 0; i < box.length; i++) {
@@ -1121,8 +1121,6 @@ angular.module('appOutfie',['ngRoute','ngAnimate','ui.bootstrap','angularUtils.d
 				};
 				var data = {
 					images : box,
-					styleSelected : $scope.styleSelected,
-					suggestion : $scope.suggestion
 				}
 				$http({
 			    	method: 'POST',
